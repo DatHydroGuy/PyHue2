@@ -10,7 +10,8 @@ class GridPinSelector:
         self.__columns = len(grid[0])
 
     def generate_grid_pins(self, pins=GameConstants.GRID_PINS_RANDOMISED):
-        grid_pin_type = randint(0, 6) if pins == GameConstants.GRID_PINS_RANDOMISED else pins
+        grid_pin_type = randint(GameConstants.GRID_PINS_CORNERS, GameConstants.GRID_PINS_RANDOMISED - 1) if\
+            pins == GameConstants.GRID_PINS_RANDOMISED else pins
         if grid_pin_type == GameConstants.GRID_PINS_CORNERS:
             self.generate_corners_grid_pins()
         elif grid_pin_type == GameConstants.GRID_PINS_VERTICAL:
@@ -25,8 +26,10 @@ class GridPinSelector:
             self.generate_diagonal_grid_pins()
         elif grid_pin_type == GameConstants.GRID_PINS_RANDOM_DIAGONAL:
             self.generate_random_diagonal_grid_pins()
-        else:  # 7
+        elif grid_pin_type == GameConstants.GRID_PINS_RANDOM:
             self.generate_random_grid_pins()
+        else:
+            self.generate_knights_tour_grid_pins()
 
     def generate_corners_grid_pins(self):
         self.grid[0][0].set_pinned(True)
@@ -65,6 +68,12 @@ class GridPinSelector:
         for row in range(self.__rows):
             for col in range(self.__columns):
                 if (row + col) % gap == 0:
+                    self.grid[row][col].set_pinned(True)
+
+    def generate_knights_tour_grid_pins(self):
+        for row in range(self.__rows):
+            for col in range(self.__columns):
+                if row % 2 == 0 and col % 4 == 0 or row % 2 == 1 and col % 4 == 2:
                     self.grid[row][col].set_pinned(True)
 
     def generate_random_grid_pins(self):

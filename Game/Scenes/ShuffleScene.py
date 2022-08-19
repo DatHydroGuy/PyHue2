@@ -30,3 +30,7 @@ class ShuffleScene(Scene):
         for event in events:
             if event.type == pygame.QUIT:
                 exit()
+
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_ESCAPE:
+                    exit()

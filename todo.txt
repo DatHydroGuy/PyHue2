@@ -1,12 +1,12 @@
 DONE restore shuffling
 restore coloured background on title and menu screens
-and manual pin configuration picker
+DONE and manual pin configuration picker
 DONE complete high score screen
 DONE update high scores to cater for pre-defined levels
 allow even width and height (and update pin configs to cater for them, either by excluding some when even dimensions
     are picked, or by allowing a gap of 2 pins in the middle of the play grid)
-have separate options / highscore screens for random and pre-defined levels??? (random uses current screen, pre-defined
-    has a new one?)
+DONE have separate options / highscore screens for random and pre-defined levels??? (random uses current screen, pre-
+    defined has a new one?)
 when levels01.dat is completed, show user a "You have completed..." screen with an option to quit or load a random level
 clean up unneeded code
 clean up unneeded files

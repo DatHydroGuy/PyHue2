@@ -106,7 +106,7 @@ class OptionsScene(Scene):
 
     def draw_sliders(self):
         pin_layouts = ["Corners", "Vert Edges", "Horiz Edges", "Border", "Alternating", "Diagonal", "Rnd Diagonal",
-                       "Random", "Rnd Choice"]
+                       "Knights Tour", "Random", "Rnd Choice"]
         self.draw_right_aligned_text(self.basic_font, 'Width: ', pygame.Color('White'),
                                      self.width * 0.31, self.height * self.slider_draw[0])
         self.draw_right_aligned_text(self.basic_font, 'Height: ', pygame.Color('White'),

@@ -26,7 +26,7 @@ class HighScoreScene(Scene):
         self.__pins = None
         self.__level = None
         self.__pin_text = ["Corners", "Vert Edges", "Horiz Edges", "Border", "Alternating7", "Diagonal", "Rnd Diagonal",
-                           "Random", "Rnd Choice"]
+                           "Knights Tour", "Random", "Rnd Choice"]
 
     def setup(self):
         super(HighScoreScene, self).setup()
@@ -101,11 +101,14 @@ class HighScoreScene(Scene):
         self.get_game().change_scene(0)
 
     def play_next(self):
-        if self.__level.load_next_level():
-            self.get_game().shuffle_start = pygame.time.get_ticks()
-            self.get_game().change_scene(2)
-        else:
+        if str(self.__level) == '0':
             self.get_game().change_scene(1)
+        else:
+            if self.__level.load_next_level():
+                self.get_game().shuffle_start = pygame.time.get_ticks()
+                self.get_game().change_scene(2)
+            else:
+                self.get_game().change_scene(1)
 
     def update(self):
         super(HighScoreScene, self).update()
@@ -132,7 +135,13 @@ class HighScoreScene(Scene):
                                                  self.__pastel, self.__spread, self.__pins, self.__moves, self.__time)
                 exit()
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                self.score_file.save_high_scores(self.__level, self.grid_width, self.grid_height,
-                                                 self.__pastel, self.__spread, self.__pins, self.__moves, self.__time)
-                self.get_game().change_scene(0)
+            # if event.type == pygame.MOUSEBUTTONDOWN:
+            #     self.score_file.save_high_scores(self.__level, self.grid_width, self.grid_height,
+            #                                      self.__pastel, self.__spread, self.__pins, self.__moves, self.__time)
+            #     self.get_game().change_scene(0)
+
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_ESCAPE:
+                    self.score_file.save_high_scores(self.__level, self.grid_width, self.grid_height, self.__pastel,
+                                                     self.__spread, self.__pins, self.__moves, self.__time)
+                    exit()

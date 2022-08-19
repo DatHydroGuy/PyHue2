@@ -41,3 +41,7 @@ class PlayingGameScene(Scene):
                     clicked_tile_x = int(event.pos[0] / GameConstants.TILE_SIZE[0])
                     clicked_tile_y = int(event.pos[1] / GameConstants.TILE_SIZE[1])
                     self.get_game().get_grid().set_current_selection((clicked_tile_x, clicked_tile_y))
+
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_ESCAPE:
+                    exit()
