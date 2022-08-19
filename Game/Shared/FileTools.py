@@ -11,7 +11,6 @@ class FileTools:
         self.score_file = os.path.join(GameConstants.ASSET_DIR, GameConstants.SCORE_FILE)
         self.check_for_scores_file()
         self.levels_file = os.path.join(GameConstants.LEVELS_DIR, 'levels01.dat')
-        # self.check_for_levels_file()
 
     def check_for_scores_file(self):
         scores_file = Path(self.score_file)
@@ -22,9 +21,6 @@ class FileTools:
     def check_for_levels_file(self):
         levels_file = Path(self.levels_file)
         return levels_file.is_file()
-        # if not levels_file.is_file():
-        #     with open(levels_file, "w") as write_file:
-        #         write_file.write('#columns,rows,upperleftcolour,upperrightcolour,lowerleftcolour,lowerrightcolour\n')
 
     def read_level(self, level_number):
         width = 0
@@ -55,7 +51,7 @@ class FileTools:
             corner_colours = None
         return width, height, corner_colours
 
-    def get_high_scores(self, level, width, height, pastel, spread):
+    def get_high_scores(self, level, width, height, pastel, spread, pins):
         with open(self.score_file, "r") as read_file:
             try:
                 scores_dict = json.load(read_file)
@@ -85,18 +81,23 @@ class FileTools:
         try:
             _ = scores_dict[str(level)][str(width)][str(height)][str(pastel)][str(spread)]
         except KeyError:
-            scores_dict[str(level)][str(width)][str(height)][str(pastel)][str(spread)] = [0, 0, 0]
+            scores_dict[str(level)][str(width)][str(height)][str(pastel)][str(spread)] = {}
+
+        try:
+            _ = scores_dict[str(level)][str(width)][str(height)][str(pastel)][str(spread)][str(pins)]
+        except KeyError:
+            scores_dict[str(level)][str(width)][str(height)][str(pastel)][str(spread)][str(pins)] = [0, 0, 0]
 
         return scores_dict
 
-    def save_high_scores(self, level, width, height, pastel, spread, moves, seconds):
-        saved_dict = self.get_high_scores(level, width, height, pastel, spread)
-        curr_stats = saved_dict[str(level)][str(width)][str(height)][str(pastel)][str(spread)]
+    def save_high_scores(self, level, width, height, pastel, spread, pins, moves, seconds):
+        saved_dict = self.get_high_scores(level, width, height, pastel, spread, pins)
+        curr_stats = saved_dict[str(level)][str(width)][str(height)][str(pastel)][str(spread)][str(pins)]
         new_avg_moves = (curr_stats[1] * curr_stats[0] + moves) / (curr_stats[0] + 1)
         new_avg_time = (curr_stats[2] * curr_stats[0] + seconds) / (curr_stats[0] + 1)
-        saved_dict[str(level)][str(width)][str(height)][str(pastel)][str(spread)] = [curr_stats[0] + 1,
-                                                                                     new_avg_moves,
-                                                                                     new_avg_time]
+        saved_dict[str(level)][str(width)][str(height)][str(pastel)][str(spread)][str(pins)] = [curr_stats[0] + 1,
+                                                                                                new_avg_moves,
+                                                                                                new_avg_time]
 
         with open(self.score_file, "w") as write_file:
             json.dump(saved_dict, write_file)

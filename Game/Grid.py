@@ -7,7 +7,8 @@ from Game.Tiles import *
 
 
 class Grid:
-    def __init__(self, game, columns, rows, pastel=0.5, spread=1.0, corner_colours=None):
+    def __init__(self, game, columns, rows, pastel=0.5, spread=1.0, pins=GameConstants.GRID_PINS_RANDOMISED,
+                 corner_colours=None):
         self.__game = game
         self.__columns = columns
         self.__rows = rows
@@ -34,7 +35,7 @@ class Grid:
                              for x in range(columns)] for y in range(rows)]
         self.generate_corner_colours(corner_colours, pastel, spread)
         gps = GridPinSelector(self.__game_grid)
-        gps.generate_grid_pins()
+        gps.generate_grid_pins(pins)
         self.generate_tile_array(GameConstants.TILE_SIZE)
 
     def get_grid_size(self):

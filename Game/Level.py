@@ -1,14 +1,17 @@
 from Game.Grid import Grid
+from Game.Shared import GameConstants
 from Game.Shared.FileTools import FileTools
 
 
 class Level:
-    def __init__(self, game, columns, rows, pastel=0.5, spread=1.0, corner_colours=None):
+    def __init__(self, game, columns, rows, pastel=0.5, spread=1.0, pins=GameConstants.GRID_PINS_RANDOMISED,
+                 corner_colours=None):
         self.__file = FileTools()
         self.__game = game
         self.__pastel = pastel
         self.__spread = spread
-        self.__game_grid = Grid(game, columns, rows, pastel, spread, corner_colours)
+        self.__pins = pins
+        self.__game_grid = Grid(game, columns, rows, pastel, spread, pins, corner_colours)
         self.__current_level = 0
 
     def __str__(self):
@@ -22,6 +25,9 @@ class Level:
 
     def get_spread(self):
         return self.__spread
+
+    def get_pins(self):
+        return self.__pins
 
     def load_next_level(self):
         self.__current_level += 1
@@ -41,7 +47,7 @@ class Level:
         width = self.__game.num_tiles_horizontally
         height = self.__game.num_tiles_vertically
         self.__game.set_size(width, height)
-        self.__game_grid = Grid(self.__game, width, height, self.__pastel, self.__spread)
+        self.__game_grid = Grid(self.__game, width, height, self.__pastel, self.__spread, self.__pins)
 
     def load(self, level_number):
         self.__current_level = level_number
@@ -52,5 +58,6 @@ class Level:
             return False
         else:
             self.__game.set_size(width, height)
-            self.__game_grid = Grid(self.__game, width, height, self.__pastel, self.__spread, corner_colours)
+            self.__game_grid = Grid(self.__game, width, height, self.__pastel, self.__spread, self.__pins,
+                                    corner_colours)
             return True

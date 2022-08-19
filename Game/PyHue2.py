@@ -37,7 +37,7 @@ class PyHue2:
 
         self.__scenes = (
             TitleScene(self),
-            MenuScene(self),
+            OptionsScene(self),
             ShuffleScene(self),
             PlayingGameScene(self),
             GameOverScene(self),
@@ -75,8 +75,8 @@ class PyHue2:
     def get_level(self):
         return self.__level
 
-    def set_level(self, columns, rows, pastel, spread, corner_colours=None):
-        self.__level = Level(self, columns, rows, pastel, spread, corner_colours)
+    def set_level(self, columns, rows, pastel, spread, pins=GameConstants.GRID_PINS_RANDOMISED, corner_colours=None):
+        self.__level = Level(self, columns, rows, pastel, spread, pins, corner_colours)
 
     def load_level(self, level_num):
         if level_num == 0:

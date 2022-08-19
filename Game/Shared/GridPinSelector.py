@@ -9,21 +9,21 @@ class GridPinSelector:
         self.__rows = len(grid)
         self.__columns = len(grid[0])
 
-    def generate_grid_pins(self):
-        grid_type = randint(0, 6)
-        if grid_type == GameConstants.GRID_TYPE_CORNERS:
+    def generate_grid_pins(self, pins=GameConstants.GRID_PINS_RANDOMISED):
+        grid_pin_type = randint(0, 6) if pins == GameConstants.GRID_PINS_RANDOMISED else pins
+        if grid_pin_type == GameConstants.GRID_PINS_CORNERS:
             self.generate_corners_grid_pins()
-        elif grid_type == GameConstants.GRID_TYPE_VERTICAL:
+        elif grid_pin_type == GameConstants.GRID_PINS_VERTICAL:
             self.generate_vertical_grid_pins()
-        elif grid_type == GameConstants.GRID_TYPE_HORIZONTAL:
+        elif grid_pin_type == GameConstants.GRID_PINS_HORIZONTAL:
             self.generate_horizontal_grid_pins()
-        elif grid_type == GameConstants.GRID_TYPE_BORDERS:
+        elif grid_pin_type == GameConstants.GRID_PINS_BORDERS:
             self.generate_borders_grid_pins()
-        elif grid_type == GameConstants.GRID_TYPE_ALTERNATING:
+        elif grid_pin_type == GameConstants.GRID_PINS_ALTERNATING:
             self.generate_alternating_grid_pins()
-        elif grid_type == GameConstants.GRID_TYPE_DIAGONAL:
+        elif grid_pin_type == GameConstants.GRID_PINS_DIAGONAL:
             self.generate_diagonal_grid_pins()
-        elif grid_type == GameConstants.GRID_TYPE_KNIGHTS_TOUR:
+        elif grid_pin_type == GameConstants.GRID_PINS_RANDOM_DIAGONAL:
             self.generate_random_diagonal_grid_pins()
         else:  # 7
             self.generate_random_grid_pins()

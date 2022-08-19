@@ -23,7 +23,10 @@ class HighScoreScene(Scene):
         self.__scores = None
         self.__pastel = None
         self.__spread = None
+        self.__pins = None
         self.__level = None
+        self.__pin_text = ["Corners", "Vert Edges", "Horiz Edges", "Border", "Alternating7", "Diagonal", "Rnd Diagonal",
+                           "Random", "Rnd Choice"]
 
     def setup(self):
         super(HighScoreScene, self).setup()
@@ -33,7 +36,7 @@ class HighScoreScene(Scene):
         self.__time = self.get_game().get_time() / 1000
         self.__pastel = int(self.__level.get_pastel() * 100)
         self.__spread = int(self.__level.get_spread() * 100)
-
+        self.__pins = self.__level.get_pins()
         self.grid_width = self.get_game().get_grid().get_grid_size()[0]
         self.grid_height = self.get_game().get_grid().get_grid_size()[1]
         self.centre_window_on_screen(GameConstants.SCREEN_SIZE)
@@ -44,8 +47,8 @@ class HighScoreScene(Scene):
             self.draw_screen_centered_text(f'Width:{self.grid_width}, Height:{self.grid_height}', self.basic_font,
                                            pygame.Color('Grey'), self.screen_height * 0.20)
             self.draw_screen_centered_text(f'Pastel:{int(100 * self.__pastel)}%, Spread:{self.__spread}%,'
-                                           f' Pins:{0}', self.basic_font, pygame.Color('Grey'),
-                                           self.screen_height * 0.28)
+                                           f' Pins:{self.__pin_text[self.__pins]}', self.basic_font,
+                                           pygame.Color('Grey'), self.screen_height * 0.28)
         else:
             self.draw_screen_centered_text(f'Level:{self.__level}', self.basic_font,
                                            pygame.Color('White'), self.screen_height * 0.25)
@@ -59,8 +62,6 @@ class HighScoreScene(Scene):
                                        pygame.Color('Grey'), self.screen_height * 0.70)
         self.draw_screen_centered_text(f'Average time: {self.__scores[2]:.3f} seconds', self.basic_font,
                                        pygame.Color('Grey'), self.screen_height * 0.78)
-        # self.draw_screen_centered_text('Click to return to title screen', self.basic_font, pygame.Color('White'),
-        #                                self.screen_height * 0.92)
 
     @staticmethod
     def button(button_text, font, colour, top_left_x, top_left_y, width, height,
@@ -89,12 +90,10 @@ class HighScoreScene(Scene):
         button_text = 'Play Random' if str(self.__level) == '0' else 'Next Level'
         self.button(button_text, self.button_font, pygame.Color('Black'),
                     self.screen_width * 0.25 - text_rectangle.width // 2, self.screen_height * 0.92,
-                    # self.screen_width * 0.5 - text_rectangle.width // 2, self.screen_height * 0.72,
                     text_rectangle.width, text_rectangle.height, pygame.Color('DarkGreen'),
                     pygame.Color('Green'), self.play_next)
         self.button('Back To Title', self.button_font, pygame.Color('Black'),
                     self.screen_width * 0.75 - text_rectangle.width // 2, self.screen_height * 0.92,
-                    # self.screen_width * 0.5 - text_rectangle.width // 2, self.screen_height * 0.88,
                     text_rectangle.width, text_rectangle.height, pygame.Color('DarkRed'),
                     pygame.Color('Red'), self.back_to_title)
 
@@ -103,7 +102,6 @@ class HighScoreScene(Scene):
 
     def play_next(self):
         if self.__level.load_next_level():
-            # self.get_game().load_level(0)
             self.get_game().shuffle_start = pygame.time.get_ticks()
             self.get_game().change_scene(2)
         else:
@@ -114,9 +112,9 @@ class HighScoreScene(Scene):
         if not self.__centred:
             self.centre_window_on_screen(GameConstants.SCREEN_SIZE)
             saved_scores = self.score_file.get_high_scores(self.__level, self.grid_width,
-                                                           self.grid_height, self.__pastel, self.__spread)
+                                                           self.grid_height, self.__pastel, self.__spread, self.__pins)
             self.__scores = saved_scores[str(self.__level)][str(self.grid_width)][str(
-                self.grid_height)][str(self.__pastel)][str(self.__spread)]
+                self.grid_height)][str(self.__pastel)][str(self.__spread)][str(self.__pins)]
             self.__centred = True
 
     def render(self):
@@ -131,10 +129,10 @@ class HighScoreScene(Scene):
         for event in events:
             if event.type == pygame.QUIT:
                 self.score_file.save_high_scores(self.__level, self.grid_width, self.grid_height,
-                                                 self.__pastel, self.__spread, self.__moves, self.__time)
+                                                 self.__pastel, self.__spread, self.__pins, self.__moves, self.__time)
                 exit()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.score_file.save_high_scores(self.__level, self.grid_width, self.grid_height,
-                                                 self.__pastel, self.__spread, self.__moves, self.__time)
+                                                 self.__pastel, self.__spread, self.__pins, self.__moves, self.__time)
                 self.get_game().change_scene(0)

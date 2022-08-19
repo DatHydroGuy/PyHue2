@@ -10,3 +10,4 @@ have separate options / highscore screens for random and pre-defined levels??? (
 when levels01.dat is completed, show user a "You have completed..." screen with an option to quit or load a random level
 clean up unneeded code
 clean up unneeded files
+create a level designer? (complete with custom pin designer?)
