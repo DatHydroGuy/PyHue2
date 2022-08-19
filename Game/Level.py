@@ -25,10 +25,16 @@ class Level:
 
     def load_next_level(self):
         self.__current_level += 1
+        level_found = False
         if self.__file.check_for_levels_file():
-            self.load(self.__current_level)
+            level_found = self.load(self.__current_level)
         else:
             self.load_random()
+        return level_found
+
+    def load_options_screen(self):
+        self.__current_level = 0
+        self.__game.change_scene(0)
 
     def load_random(self):
         self.__current_level = 0
@@ -41,8 +47,10 @@ class Level:
         self.__current_level = level_number
         width, height, corner_colours = self.__file.read_level(level_number)
         if width == -1 or height == -1 or corner_colours is None:
-            # No more levels left in the levels01.dat file, so load up a random level
-            self.load_random()
+            # No more levels left in the levels01.dat file, so send user back to options screen
+            self.load_options_screen()
+            return False
         else:
             self.__game.set_size(width, height)
             self.__game_grid = Grid(self.__game, width, height, self.__pastel, self.__spread, corner_colours)
+            return True

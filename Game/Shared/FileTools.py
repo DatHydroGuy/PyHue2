@@ -30,24 +30,29 @@ class FileTools:
         width = 0
         height = 0
         corner_colours = []
-        with open(self.levels_file, "r") as read_file:
-            try:
-                levels_data = read_file.readlines()
-                line = levels_data[level_number]
-                elements = line.split('(')
-                for index, element in enumerate(elements):
-                    element = element.replace(')', '')
-                    if index == 0:
-                        width, height = [int(x) for x in element.split(',')[:-1]]
-                    elif 1 <= index <= 3:
-                        corner_colours.append(tuple(int(x) for x in element.split(',')[:-1]))
-                    elif index == 4:
-                        corner_colours.append(tuple(int(x) for x in element.split(',')))
+        try:
+            with open(self.levels_file, "r") as read_file:
+                try:
+                    levels_data = read_file.readlines()
+                    line = levels_data[level_number]
+                    elements = line.split('(')
+                    for index, element in enumerate(elements):
+                        element = element.replace(')', '')
+                        if index == 0:
+                            width, height = [int(x) for x in element.split(',')[:-1]]
+                        elif 1 <= index <= 3:
+                            corner_colours.append(tuple(int(x) for x in element.split(',')[:-1]))
+                        elif index == 4:
+                            corner_colours.append(tuple(int(x) for x in element.split(',')))
 
-            except IndexError:
-                width = -1
-                height = -1
-                corner_colours = None
+                except IndexError:
+                    width = -1
+                    height = -1
+                    corner_colours = None
+        except FileNotFoundError:
+            width = -1
+            height = -1
+            corner_colours = None
         return width, height, corner_colours
 
     def get_high_scores(self, level, width, height, pastel, spread):

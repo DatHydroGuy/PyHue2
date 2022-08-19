@@ -23,8 +23,3 @@ class GameConstants:
     SOLVED_FADE_IN = 1500
     SOLVED_PAUSE = 500
     SOLVED_FADE_OUT = 1500
-
-    # SPRITE_BALL = os.path.join("Assets", "ball.png")
-    # SPRITE_BRICK = os.path.join("Assets", "standard.png")
-    # SPRITE_SPEED_BRICK = os.path.join("Assets", "speed.png")
-    # SPRITE_LIFE_BRICK = os.path.join("Assets", "life.png")

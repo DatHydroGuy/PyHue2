@@ -3,7 +3,7 @@ from math import sin
 import pygame
 
 from Game.Scenes.Scene import Scene
-from ..Shared import GameConstants
+from ..Shared import GameConstants, ColourTools
 from ..Slider import Slider
 
 
@@ -15,6 +15,9 @@ class MenuScene(Scene):
         self.slider_draw = [0.3, 0.4, 0.5, 0.6]
         self.width = GameConstants.SCREEN_SIZE[0]
         self.height = GameConstants.SCREEN_SIZE[1]
+        self.zero_to_one = 0
+        self.colour1 = None
+        self.colour2 = None
 
         self.display_surface = pygame.display.get_surface()
         min_dimension = min(self.width, self.height)
@@ -39,6 +42,10 @@ class MenuScene(Scene):
         self.sliders.append(self.slider3)
         self.sliders.append(self.slider4)
         self.offset_x = 0
+
+    def setup(self):
+        self.colour1 = self.get_game().colour1
+        self.colour2 = self.get_game().colour2
 
     def button(self, button_text, font, colour, top_left_x, top_left_y, width, height,
                inactive_colour, active_colour, callback=None):
@@ -118,16 +125,13 @@ class MenuScene(Scene):
         self.slider3.draw(self.display_surface, pygame.Color('White'))
         self.slider4.draw(self.display_surface, pygame.Color('White'))
 
-    def render(self, start_time=0):
-        colour1 = self.get_game().colour1
-        colour2 = self.get_game().colour2
-
-        # Updates
+    def update(self, start_time=0):
         elapsed = (pygame.time.get_ticks() - start_time) / 1500.0
-        zero_to_one = ((sin(elapsed) * 0.99) + 1.0) * 0.5
+        self.zero_to_one = ((sin(elapsed) * 0.99) + 1.0) * 0.5
 
+    def render(self):
         # Draw TODO re-add following line
-        # ColourTools.fill_double_gradient(pygame.display.get_surface(), colour1, colour2, zero_to_one)
+        # ColourTools.fill_double_gradient(pygame.display.get_surface(), self.colour1, self.colour2, self.zero_to_one)
         self.draw_screen_centered_text("Options", self.title_font, pygame.Color('White'), 5)
         self.draw_sliders()
         self.draw_buttons()

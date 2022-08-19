@@ -8,3 +8,5 @@ allow even width and height (and update pin configs to cater for them, either by
 have separate options / highscore screens for random and pre-defined levels??? (random uses current screen, pre-defined
     has a new one?)
 when levels01.dat is completed, show user a "You have completed..." screen with an option to quit or load a random level
+clean up unneeded code
+clean up unneeded files

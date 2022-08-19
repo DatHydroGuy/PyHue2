@@ -102,10 +102,12 @@ class HighScoreScene(Scene):
         self.get_game().change_scene(0)
 
     def play_next(self):
-        self.__level.load_next_level()
-        # self.get_game().load_level(0)
-        self.get_game().shuffle_start = pygame.time.get_ticks()
-        self.get_game().change_scene(2)
+        if self.__level.load_next_level():
+            # self.get_game().load_level(0)
+            self.get_game().shuffle_start = pygame.time.get_ticks()
+            self.get_game().change_scene(2)
+        else:
+            self.get_game().change_scene(1)
 
     def update(self):
         super(HighScoreScene, self).update()

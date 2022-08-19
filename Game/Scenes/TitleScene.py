@@ -21,6 +21,8 @@ class TitleScene(Scene):
         self.heart = '♥'  # Use Alt + Numeric pad 3 key
         self.width = GameConstants.SCREEN_SIZE[0]
         self.height = GameConstants.SCREEN_SIZE[1]
+        self.zero_to_one1 = 0
+        self.zero_to_one2 = 0
 
         min_dimension = min(self.width, self.height)
         self.basic_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.06))
@@ -54,17 +56,18 @@ class TitleScene(Scene):
         gradient_text_rectangle.center = (self.width / 2, self.height / 3)
         display_surface.blit(gradient_text_surface, gradient_text_rectangle)
 
-    def render(self, start_time=0):
+    def update(self, start_time=0):
         # Updates
         elapsed1 = (pygame.time.get_ticks() - start_time) / 1500.0
         elapsed2 = (pygame.time.get_ticks() - start_time) / 1000.0
-        zero_to_one1 = ((sin(elapsed1) * 0.99) + 1.0) * 0.5
-        zero_to_one2 = ((sin(elapsed2) * 0.99) + 1.0) * 0.5
+        self.zero_to_one1 = ((sin(elapsed1) * 0.99) + 1.0) * 0.5
+        self.zero_to_one2 = ((sin(elapsed2) * 0.99) + 1.0) * 0.5
 
+    def render(self):
         # Draw TODO re-add following lines
-        # ColourTools.fill_double_gradient(pygame.display.get_surface(), self.colour1, self.colour2, zero_to_one1)
+        # ColourTools.fill_double_gradient(pygame.display.get_surface(), self.colour1, self.colour2, self.zero_to_one1)
+        # self.draw_gradient_text(pygame.display.get_surface(), self.colour1, self.colour2, self.zero_to_one2)
         self.draw_instructions()
-        # self.draw_gradient_text(pygame.display.get_surface(), self.colour1, self.colour2, zero_to_one2)
 
         self.get_game().colour1 = pygame.Color(self.colour1[0], self.colour1[1], self.colour1[2])
         self.get_game().colour2 = pygame.Color(self.colour2[0], self.colour2[1], self.colour2[2])
