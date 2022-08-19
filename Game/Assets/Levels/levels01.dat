@@ -1,0 +1,3 @@
+#columns,rows,upperleftcolour,upperrightcolour,lowerleftcolour,lowerrightcolour
+7,5,(255,0,0),(0,255,0),(0,0,255),(255,255,0)
+9,7,(0,255,255),(255,0,255),(255,255,0),(10,10,10)
