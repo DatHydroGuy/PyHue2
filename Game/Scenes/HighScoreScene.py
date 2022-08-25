@@ -1,5 +1,4 @@
 from __future__ import annotations
-from typing import Callable
 
 import pygame
 
@@ -66,27 +65,6 @@ class HighScoreScene(Scene):
         self.draw_screen_centered_text(f'Average time: {self.__scores[2]:.3f} seconds', self.basic_font,
                                        pygame.Color('Grey'), self.screen_height * 0.78)
 
-    @staticmethod
-    def button(button_text: str, font: pygame.font, colour: pygame.Color, top_left_x: int, top_left_y: int, width: int,
-               height: int, inactive_colour: pygame.Color, active_colour: pygame.Color,
-               callback: Callable[[], None] = None) -> None:
-        # Taken from https://pythonprogramming.net/pygame-button-function-events/?completed=/pygame-button-function/
-        mouse = pygame.mouse.get_pos()
-        click = pygame.mouse.get_pressed()
-
-        if top_left_x + width > mouse[0] > top_left_x and top_left_y + height > mouse[1] > top_left_y:
-            pygame.draw.rect(pygame.display.get_surface(), active_colour, (top_left_x, top_left_y, width, height))
-
-            if click[0] == 1 and callback is not None:
-                callback()
-        else:
-            pygame.draw.rect(pygame.display.get_surface(), inactive_colour, (top_left_x, top_left_y, width, height))
-
-        text_surface = font.render(button_text, True, colour)
-        text_rectangle = text_surface.get_rect()
-        text_rectangle.center = ((top_left_x + (width / 2)), (top_left_y + (height / 2)))
-        pygame.display.get_surface().blit(text_surface, text_rectangle)
-
     def draw_buttons(self) -> None:
         text_surface = self.button_font.render('Play XXXXXXXX', True, pygame.Color('Black'))
         text_rectangle = text_surface.get_rect()
@@ -114,7 +92,7 @@ class HighScoreScene(Scene):
                 self.get_game().shuffle_start = pygame.time.get_ticks()
                 self.get_game().change_scene(2)
             else:
-                self.get_game().change_scene(1)
+                self.get_game().change_scene(7)
 
     def save_score(self) -> None:
         self.score_file.save_high_scores(self.__level, self.grid_width, self.grid_height,

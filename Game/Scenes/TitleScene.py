@@ -60,8 +60,8 @@ class TitleScene(Scene):
         display_surface.blit(gradient_text_surface, gradient_text_rectangle)
 
     def update(self, start_time: int = 0) -> None:
-        self.zero_to_one1 = Scene.update_colours(1500.0, start_time)
-        self.zero_to_one2 = Scene.update_colours(1000.0, start_time)
+        self.zero_to_one1 = self.update_colours(1500.0, start_time)
+        self.zero_to_one2 = self.update_colours(1000.0, start_time)
 
     def render(self) -> None:
         # TODO re-add following lines

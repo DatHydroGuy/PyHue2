@@ -46,6 +46,7 @@ class PyHue2:
             GameOverScene(self),
             HighScoreScene(self),
             PausedScene(self),
+            LevelsCompleteScene(self),
         )
 
         self.__currentScene = 0

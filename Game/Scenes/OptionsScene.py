@@ -1,5 +1,4 @@
 from __future__ import annotations
-from typing import Callable
 
 import pygame
 
@@ -52,26 +51,6 @@ class OptionsScene(Scene):
     def setup(self) -> None:
         self.colour1 = self.get_game().colour1
         self.colour2 = self.get_game().colour2
-
-    def button(self, button_text: str, font: pygame.font, colour: pygame.Color, top_left_x: int, top_left_y: int,
-               width: int, height: int, inactive_colour: pygame.Color, active_colour: pygame.Color,
-               callback: Callable[[], None] = None) -> None:
-        # Taken from https://pythonprogramming.net/pygame-button-function-events/?completed=/pygame-button-function/
-        mouse = pygame.mouse.get_pos()
-        click = pygame.mouse.get_pressed()
-
-        if top_left_x + width > mouse[0] > top_left_x and top_left_y + height > mouse[1] > top_left_y:
-            pygame.draw.rect(self.display_surface, active_colour, (top_left_x, top_left_y, width, height))
-
-            if click[0] == 1 and callback is not None:
-                callback()
-        else:
-            pygame.draw.rect(self.display_surface, inactive_colour, (top_left_x, top_left_y, width, height))
-
-        text_surface = font.render(button_text, True, colour)
-        text_rectangle = text_surface.get_rect()
-        text_rectangle.center = ((top_left_x + (width / 2)), (top_left_y + (height / 2)))
-        self.display_surface.blit(text_surface, text_rectangle)
 
     def back_to_title(self) -> None:
         self.get_game().change_scene(0)
@@ -137,7 +116,7 @@ class OptionsScene(Scene):
         self.slider5.draw(self.display_surface, pygame.Color('White'))
 
     def update(self, start_time: int = 0) -> None:
-        self.zero_to_one = Scene.update_colours(1500.0, start_time)
+        self.zero_to_one = self.update_colours(1500.0, start_time)
 
     def render(self) -> None:
         # Draw TODO re-add following line

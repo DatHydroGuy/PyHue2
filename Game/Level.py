@@ -45,7 +45,7 @@ class Level:
 
     def load_options_screen(self) -> None:
         self.__current_level = 0
-        self.__game.change_scene(0)
+        self.__game.change_scene(7)
 
     def load_random(self) -> None:
         self.__current_level = 0
@@ -56,7 +56,7 @@ class Level:
 
     def load(self, level_number: int) -> bool:
         self.__current_level = level_number
-        width, height, pins,  corner_colours = self.__file.read_level(level_number)
+        width, height, pins, corner_colours = self.__file.read_level(level_number)
         if width == -1 or height == -1 or pins == -1 or corner_colours is None:
             # No more levels left in the levels01.dat file, so send user back to options screen
             self.load_options_screen()

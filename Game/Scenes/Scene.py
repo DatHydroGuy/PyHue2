@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from math import sin
+from typing import Callable
 
 import pygame.display
 
@@ -39,6 +40,27 @@ class Scene:
         self.__game.screen = pygame.display.set_mode(window_size, pygame.DOUBLEBUF, 32)
         self.__game.pg_window.position = ((self.__game.screen_width - window_size[0]) // 2,
                                           (self.__game.screen_height - window_size[1]) // 2)
+
+    @staticmethod
+    def button(button_text: str, font: pygame.font, colour: pygame.Color, top_left_x: int, top_left_y: int,
+               width: int, height: int, inactive_colour: pygame.Color, active_colour: pygame.Color,
+               callback: Callable[[], None] = None) -> None:
+        # Taken from https://pythonprogramming.net/pygame-button-function-events/?completed=/pygame-button-function/
+        mouse = pygame.mouse.get_pos()
+        click = pygame.mouse.get_pressed()
+
+        if top_left_x + width > mouse[0] > top_left_x and top_left_y + height > mouse[1] > top_left_y:
+            pygame.draw.rect(pygame.display.get_surface(), active_colour, (top_left_x, top_left_y, width, height))
+
+            if click[0] == 1 and callback is not None:
+                callback()
+        else:
+            pygame.draw.rect(pygame.display.get_surface(), inactive_colour, (top_left_x, top_left_y, width, height))
+
+        text_surface = font.render(button_text, True, colour)
+        text_rectangle = text_surface.get_rect()
+        text_rectangle.center = ((top_left_x + (width / 2)), (top_left_y + (height / 2)))
+        pygame.display.get_surface().blit(text_surface, text_rectangle)
 
     @staticmethod
     def draw_screen_centered_text(text: str, font: pygame.font.Font, colour: pygame.Color, y_position: int = 0) -> None:
