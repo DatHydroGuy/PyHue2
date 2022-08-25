@@ -68,4 +68,6 @@ class TileHolder(GameObject):
         rect = self.get_tile().render()
         if self.__is_pinned:
             pygame.draw.circle(self.__game.screen, pygame.Color('black'), rect.center,
-                               min(rect.width, rect.height) // 20, 0)
+                               min(rect.width, rect.height) // 15, 0)
+            pygame.draw.circle(self.__game.screen, pygame.Color('white'), rect.center,
+                               min(rect.width, rect.height) // 30, 0)

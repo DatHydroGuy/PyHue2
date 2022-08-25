@@ -1,3 +1,4 @@
+from __future__ import annotations
 from random import random, shuffle
 
 from Game.Shared import *
@@ -5,28 +6,30 @@ from Game.Tiles import *
 
 
 class Grid:
-    def __init__(self, game, columns, rows, pastel=0.5, spread=1.0, pins=GameConstants.GRID_PINS_RANDOMISED,
-                 corner_colours=None):
+    def __init__(self, game: Game.PyHue2, columns: int, rows: int, pastel: float = 0.5, spread: float = 1.0,
+                 pins: int = GameConstants.GRID_PINS_RANDOMISED, corner_colours: list[pygame.Color] = None) -> None:
         self.__game = game
         self.__columns = columns
         self.__rows = rows
         self.__curr_selection = None
         self.__solved_time = 999999999
-        # self.__paused_time = 0
         self.__incorrect_tiles = None
         self.__current_level = 0
         self.__number_of_moves = 0
         self.__start_time = pygame.time.get_ticks()
-        # self.__pause_start_time = 0
-        self.transition = TransitionCreator(global_start=1000, global_fade_out=2500, global_pause=500,
-                                            global_fade_in=2500, local_fade_out=200, local_fade_in=200)
         self.__solved = False
         self.__shuffled = False
+        self.transition = TransitionCreator(global_start=GameConstants.FADE_OUT_START,
+                                            global_fade_out=GameConstants.FADE_OUT_DURATION,
+                                            global_pause=GameConstants.FADE_PAUSE,
+                                            global_fade_in=GameConstants.FADE_IN_DURATION,
+                                            local_fade_out=GameConstants.TILE_FADE_OUT_DURATION,
+                                            local_fade_in=GameConstants.TILE_FADE_IN_DURATION)
         self.transition_matrix = self.transition.choose_transition(columns, rows)
-        self.fade_out_start = self.transition.global_start
-        self.fade_out_end = self.fade_out_start + self.transition.global_fade_out
-        self.fade_in_start = self.fade_out_end + self.transition.global_pause
-        self.fade_in_end = self.fade_in_start + self.transition.global_fade_in
+        self.fade_out_start = GameConstants.FADE_OUT_START
+        self.fade_out_end = self.fade_out_start + GameConstants.FADE_OUT_DURATION
+        self.fade_in_start = self.fade_out_end + GameConstants.FADE_PAUSE
+        self.fade_in_end = self.fade_in_start + GameConstants.FADE_IN_DURATION
         self.__game_grid = [[TileHolder((x, y), (x * GameConstants.TILE_SIZE[0], y * GameConstants.TILE_SIZE[1]),
                                         (10, 10), False, self.__game)
                              for x in range(columns)] for y in range(rows)]
@@ -35,48 +38,38 @@ class Grid:
         gps.generate_grid_pins(pins)
         self.generate_tile_array(GameConstants.TILE_SIZE)
 
-    def get_grid_size(self):
+    def get_grid_size(self) -> tuple[int, int]:
         return self.__columns, self.__rows
 
-    def get_solved_time(self):
+    def get_solved_time(self) -> int:
         return self.__solved_time
 
-    def is_solved(self):
+    def is_solved(self) -> bool:
         return self.__solved
 
-    def is_shuffled(self):
+    def is_shuffled(self) -> bool:
         return self.__shuffled
 
-    # def start_pause(self):
-    #     self.__pause_start_time = pygame.time.get_ticks()
-    #
-    # def stop_pause(self):
-    #     self.__paused_time += (pygame.time.get_ticks() - self.__pause_start_time)
-
-    def reset(self):
+    def reset(self) -> None:
         self.__shuffled = False
         self.__solved = False
         self.__start_time = pygame.time.get_ticks()
-        # self.__pause_start_time = 0
-        # self.__paused_time = 0
-        self.fade_out_start = self.transition.global_start
-        self.fade_out_end = self.fade_out_start + self.transition.global_fade_out
-        self.fade_in_start = self.fade_out_end + self.transition.global_pause
-        self.fade_in_end = self.fade_in_start + self.transition.global_fade_in
+        self.fade_out_start = GameConstants.FADE_OUT_START
+        self.fade_out_end = self.fade_out_start + GameConstants.FADE_OUT_DURATION
+        self.fade_in_start = self.fade_out_end + GameConstants.FADE_PAUSE
+        self.fade_in_end = self.fade_in_start + GameConstants.FADE_IN_DURATION
 
-    def get_number_of_moves(self):
+    def get_number_of_moves(self) -> int:
         return self.__number_of_moves
 
-    def get_tile_holders(self):
+    def get_tile_holders(self) -> list[list[Game.Tiles.TileHolder]]:
         return self.__game_grid
 
-    def get_tile_holder(self, row, column):
-        return self.__game_grid[row][column]
-
-    def get_number_of_incorrect_tiles(self):
+    def get_number_of_incorrect_tiles(self) -> int:
         return self.__incorrect_tiles
 
-    def generate_corner_colours(self, corner_colours, pastel_factor, colour_spread):
+    def generate_corner_colours(self, corner_colours: list[pygame.Color], pastel_factor: float,
+                                colour_spread: float) -> None:
         colours = []
         if corner_colours is None:
             base_offset = random() * (1.0 - colour_spread)
@@ -96,7 +89,7 @@ class Grid:
         self.__game_grid[self.__rows - 1][self.__columns - 1].get_tile().set_colour(
             pygame.Color(colours[3][0], colours[3][1], colours[3][2]))
 
-    def generate_tile_array(self, cell_size):
+    def generate_tile_array(self, cell_size: tuple[int, int]) -> None:
         cell_width, cell_height = cell_size
         for row in range(self.__rows):
             row_step = row / float(self.__rows - 1)
@@ -114,21 +107,21 @@ class Grid:
                 tile.set_colour(colour)
                 self.__game_grid[row][column].set_tile(tile)
 
-    def fade_out_tile_array(self):
+    def fade_out_tile_array(self) -> None:
         for row in range(self.__rows):
             for column in range(self.__columns):
                 if self.get_tile_holders()[row][column].get_pinned() is False:
                     self.get_tile_holders()[row][column].fade_out(self.transition_matrix[row][column][:2],
                                                                   pygame.time.get_ticks() - self.__start_time)
 
-    def fade_in_tile_array(self):
+    def fade_in_tile_array(self) -> None:
         for row in range(self.__rows):
             for column in range(self.__columns):
                 if self.get_tile_holders()[row][column].get_pinned() is False:
                     self.get_tile_holders()[row][column].fade_in(self.transition_matrix[row][column][2:],
                                                                  pygame.time.get_ticks() - self.__start_time)
 
-    def shuffle_tile_array(self):
+    def shuffle_tile_array(self) -> None:
         flat_array = [item for row in self.get_tile_holders() for item in row if item.get_pinned() is False]
         shuffle(flat_array)
         counter = 0
@@ -139,20 +132,13 @@ class Grid:
                     self.get_tile_holders()[row][column].swap_tiles(flat_array[counter])
                     counter += 1
 
-    def ready_tile_array(self):
+    def ready_tile_array(self) -> None:
         for row in range(self.__rows):
             for column in range(self.__columns):
                 if self.get_tile_holders()[row][column].get_pinned() is False:
                     self.get_tile_holders()[row][column].make_ready()
 
-    def swap_tiles(self, row1, col1, row2, col2):
-        self.__game_grid[row1][col1], self.__game_grid[row2][col2] = \
-            self.__game_grid[row2][col2], self.__game_grid[row1][col1]
-
-    def get_current_selection(self):
-        return self.__curr_selection
-
-    def set_current_selection(self, xy_of_selected_cell):
+    def set_current_selection(self, xy_of_selected_cell: tuple[int, int]) -> None:
         if self.__game_grid[xy_of_selected_cell[1]][xy_of_selected_cell[0]].get_pinned() or not self.__shuffled:
             return
 
@@ -171,7 +157,7 @@ class Grid:
                 self.__number_of_moves += 1
             self.__curr_selection = None
 
-    def update(self):
+    def update(self) -> None:
         if not self.__shuffled:
             if self.fade_out_start <= pygame.time.get_ticks() - self.__start_time <= self.fade_out_end:
                 self.fade_out_tile_array()
@@ -198,7 +184,7 @@ class Grid:
                 self.__solved_time = pygame.time.get_ticks() - self.__start_time - self.fade_in_end
                 self.__solved = True
 
-    def render(self):
+    def render(self) -> None:
         for row, tile_holder_row in enumerate(self.__game_grid):
             for col, tile_holder in enumerate(tile_holder_row):
                 if self.__curr_selection != (col, row):

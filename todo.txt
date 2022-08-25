@@ -14,7 +14,9 @@ DONE add pause function - this should stop the game timer from incrementing when
 DONE type hints!
 DONE when pins are on rnd choice, score should reflect the randomly chosen pin config, and not "randomised"
 DONE level files need to support pin configuration setting
+DONE move transition timing values to GameConstants
 
 when levels01.dat is completed, show user a "You have completed..." screen with an option to quit or load a random level
 create a level designer? (complete with custom pin designer?)
 create a level picker which shows previews of pre-defined levels, and whether the user has completed them or not
+push as many class variables into __dunder variables as possible
