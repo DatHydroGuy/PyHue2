@@ -1,4 +1,4 @@
-#columns,rows,upperleftcolour,upperrightcolour,lowerleftcolour,lowerrightcolour
-7,5,(255,0,0),(0,255,0),(0,0,255),(255,255,0)
-9,7,(0,255,255),(255,0,255),(255,255,0),(10,10,10)
-9,9,(200, 200, 255),(200, 255, 255),(255, 200, 255),(255, 255, 255)
+#columns,rows,pinconfiguration,upperleftcolour,upperrightcolour,lowerleftcolour,lowerrightcolour
+7,5,0,(255,0,0),(0,255,0),(0,0,255),(255,255,0)
+9,7,1,(0,255,255),(255,0,255),(255,255,0),(10,10,10)
+9,9,3,(200, 200, 255),(200, 255, 255),(255, 200, 255),(255, 255, 255)

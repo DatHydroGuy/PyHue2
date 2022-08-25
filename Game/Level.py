@@ -56,13 +56,13 @@ class Level:
 
     def load(self, level_number: int) -> bool:
         self.__current_level = level_number
-        width, height, corner_colours = self.__file.read_level(level_number)
-        if width == -1 or height == -1 or corner_colours is None:
+        width, height, pins,  corner_colours = self.__file.read_level(level_number)
+        if width == -1 or height == -1 or pins == -1 or corner_colours is None:
             # No more levels left in the levels01.dat file, so send user back to options screen
             self.load_options_screen()
             return False
         else:
             self.__game.set_size(width, height)
-            self.__game_grid = Grid(self.__game, width, height, self.__pastel, self.__spread, self.__pins,
+            self.__game_grid = Grid(self.__game, width, height, self.__pastel, self.__spread, pins,
                                     corner_colours)
             return True

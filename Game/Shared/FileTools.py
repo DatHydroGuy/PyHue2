@@ -25,6 +25,7 @@ class FileTools:
     def read_level(self, level_number: int) -> tuple:
         width = 0
         height = 0
+        pins = GameConstants.GRID_PINS_RANDOMISED
         corner_colours = []
         try:
             with open(self.levels_file, "r") as read_file:
@@ -35,7 +36,7 @@ class FileTools:
                     for index, element in enumerate(elements):
                         element = element.replace(')', '')
                         if index == 0:
-                            width, height = [int(x) for x in element.split(',')[:-1]]
+                            width, height, pins = [int(x) for x in element.split(',')[:-1]]
                         elif 1 <= index <= 3:
                             corner_colours.append(tuple(int(x) for x in element.split(',')[:-1]))
                         elif index == 4:
@@ -44,12 +45,14 @@ class FileTools:
                 except IndexError:
                     width = -1
                     height = -1
+                    pins = -1
                     corner_colours = None
         except FileNotFoundError:
             width = -1
             height = -1
+            pins = -1
             corner_colours = None
-        return width, height, corner_colours
+        return width, height, pins, corner_colours
 
     def get_high_scores(self, level: int, width: int, height: int, pastel: int, spread: int, pins: int) -> dict:
         with open(self.score_file, "r") as read_file:
