@@ -1,5 +1,4 @@
 from __future__ import annotations
-from math import sin
 
 import pygame
 
@@ -50,10 +49,8 @@ class PausedScene(Scene):
         display_surface.blit(gradient_text_surface, gradient_text_rectangle)
 
     def update(self, start_time: int = 0) -> None:
-        elapsed1 = (pygame.time.get_ticks() - start_time) / 1500.0
-        elapsed2 = (pygame.time.get_ticks() - start_time) / 1000.0
-        self.zero_to_one1 = ((sin(elapsed1) * 0.99) + 1.0) * 0.5
-        self.zero_to_one2 = ((sin(elapsed2) * 0.99) + 1.0) * 0.5
+        self.zero_to_one1 = Scene.update_colours(1500.0, start_time)
+        self.zero_to_one2 = Scene.update_colours(1000.0, start_time)
 
     def render(self) -> None:
         ColourTools.fill_double_gradient(pygame.display.get_surface(), self.colour1, self.colour2, self.zero_to_one1)

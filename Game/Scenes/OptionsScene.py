@@ -1,5 +1,4 @@
 from __future__ import annotations
-from math import sin
 from typing import Callable
 
 import pygame
@@ -138,8 +137,7 @@ class OptionsScene(Scene):
         self.slider5.draw(self.display_surface, pygame.Color('White'))
 
     def update(self, start_time: int = 0) -> None:
-        elapsed = (pygame.time.get_ticks() - start_time) / 1500.0
-        self.zero_to_one = ((sin(elapsed) * 0.99) + 1.0) * 0.5
+        self.zero_to_one = Scene.update_colours(1500.0, start_time)
 
     def render(self) -> None:
         # Draw TODO re-add following line

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from math import sin
+
 import pygame.display
 
 import Game
@@ -24,6 +26,11 @@ class Scene:
 
     def setup(self) -> None:
         pass
+
+    @staticmethod
+    def update_colours(divisor: float, start_time: int = 0) -> float:
+        elapsed = (pygame.time.get_ticks() - start_time) / divisor
+        return ((sin(elapsed) * 0.99) + 1.0) * 0.5
 
     def centre_window_on_screen(self, new_window_size: tuple[int, int] = None) -> None:
         window_size = new_window_size if new_window_size is not None else \
