@@ -3,13 +3,14 @@ import ctypes
 import pygame
 from pygame._sdl2 import Window
 
+import Game.Level
 from Game import *
 from Game.Scenes import *
 from Game.Shared import GameConstants
 
 
 class PyHue2:
-    def __init__(self):
+    def __init__(self) -> None:
         user32 = ctypes.windll.user32
         self.screen_width = user32.GetSystemMetrics(0)
         self.screen_height = user32.GetSystemMetrics(1)
@@ -51,7 +52,7 @@ class PyHue2:
 
         self.__sounds = ()
 
-    def start(self):
+    def start(self) -> None:
         while 1:
             self.__clock.tick(GameConstants.FPS)
 
@@ -64,24 +65,25 @@ class PyHue2:
 
             pygame.display.update()
 
-    def change_scene(self, scene):
+    def change_scene(self, scene: int) -> None:
         self.__currentScene = scene
         self.__scenes[self.__currentScene].setup()
 
-    def set_size(self, width, height):
+    def set_size(self, width: int, height: int) -> None:
         self.num_tiles_horizontally = width
         self.num_tiles_vertically = height
 
-    def get_grid(self):
+    def get_grid(self) -> Game.Grid:
         return self.get_level().get_game_grid()
 
-    def get_level(self):
+    def get_level(self) -> Game.Level:
         return self.__level
 
-    def set_level(self, columns, rows, pastel, spread, pins=GameConstants.GRID_PINS_RANDOMISED, corner_colours=None):
+    def set_level(self, columns: int, rows: int, pastel: float, spread: float,
+                  pins: int = GameConstants.GRID_PINS_RANDOMISED, corner_colours: list[list[int]] = None) -> None:
         self.__level = Level(self, columns, rows, pastel, spread, pins, corner_colours)
 
-    def load_level(self, level_num):
+    def load_level(self, level_num: int) -> None:
         if level_num == 0:
             # play random level
             pass
@@ -90,32 +92,32 @@ class PyHue2:
             self.__level = Level(self, 5, 5)
             self.__level.load(level_num)
 
-    def get_moves(self):
+    def get_moves(self) -> int:
         return self.__moves
 
-    def set_moves(self, moves):
+    def set_moves(self, moves: int) -> None:
         self.__moves = moves
 
-    def get_time(self):
+    def get_time(self) -> int:
         return self.__time
 
-    def set_time(self, time):
+    def set_time(self, time: int) -> None:
         self.__time = time
 
-    def reset_paused_time(self):
+    def reset_paused_time(self) -> None:
         self.__paused_time = 0
 
-    def get_paused_time(self):
+    def get_paused_time(self) -> int:
         return self.__paused_time
 
-    def pause_start(self):
+    def pause_start(self) -> None:
         self.__pause_start = pygame.time.get_ticks()
 
-    def pause_end(self):
+    def pause_end(self) -> None:
         self.__paused_time += (pygame.time.get_ticks() - self.__pause_start)
         self.__pause_start = 0
 
-    def play_sound(self, sound_clip):
+    def play_sound(self, sound_clip: int) -> None:
         sound = self.__sounds[sound_clip]
         sound.stop()
         sound.play()

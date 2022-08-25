@@ -1,13 +1,16 @@
+from __future__ import annotations
 from math import sin
+from typing import Callable
 
 import pygame
 
+import Game
 from Game.Scenes.Scene import Scene
-from ..Shared import GameConstants, Slider
+from ..Shared import GameConstants, Slider, ColourTools
 
 
 class OptionsScene(Scene):
-    def __init__(self, game):
+    def __init__(self, game: Game.PyHue2) -> None:
         super(OptionsScene, self).__init__(game)
         self.sliders = []
         self.slider_values = [5, 5, 0, 100, GameConstants.GRID_PINS_RANDOMISED]
@@ -47,12 +50,13 @@ class OptionsScene(Scene):
         self.sliders.append(self.slider5)
         self.offset_x = 0
 
-    def setup(self):
+    def setup(self) -> None:
         self.colour1 = self.get_game().colour1
         self.colour2 = self.get_game().colour2
 
-    def button(self, button_text, font, colour, top_left_x, top_left_y, width, height,
-               inactive_colour, active_colour, callback=None):
+    def button(self, button_text: str, font: pygame.font, colour: pygame.Color, top_left_x: int, top_left_y: int,
+               width: int, height: int, inactive_colour: pygame.Color, active_colour: pygame.Color,
+               callback: Callable[[], None] = None) -> None:
         # Taken from https://pythonprogramming.net/pygame-button-function-events/?completed=/pygame-button-function/
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
@@ -70,10 +74,10 @@ class OptionsScene(Scene):
         text_rectangle.center = ((top_left_x + (width / 2)), (top_left_y + (height / 2)))
         self.display_surface.blit(text_surface, text_rectangle)
 
-    def back_to_title(self):
+    def back_to_title(self) -> None:
         self.get_game().change_scene(0)
 
-    def play_random(self):
+    def play_random(self) -> None:
         self.get_game().num_tiles_horizontally = self.slider1.value
         self.get_game().num_tiles_vertically = self.slider2.value
         self.get_game().set_level(self.slider1.value, self.slider2.value,
@@ -82,12 +86,12 @@ class OptionsScene(Scene):
         self.get_game().shuffle_start = pygame.time.get_ticks()
         self.get_game().change_scene(2)
 
-    def play_levels(self):
+    def play_levels(self) -> None:
         self.get_game().load_level(1)
         self.get_game().shuffle_start = pygame.time.get_ticks()
         self.get_game().change_scene(2)
 
-    def draw_buttons(self):
+    def draw_buttons(self) -> None:
         text_surface = self.button_font.render('Play XXXXX', True, pygame.Color('Black'))
         text_rectangle = text_surface.get_rect()
         text_rectangle = text_rectangle.inflate(text_rectangle.width * 0.25, text_rectangle.height * 0.25)
@@ -104,7 +108,7 @@ class OptionsScene(Scene):
                     text_rectangle.width, text_rectangle.height, pygame.Color('DarkGreen'),
                     pygame.Color('Green'), self.play_random)
 
-    def draw_sliders(self):
+    def draw_sliders(self) -> None:
         pin_layouts = ["Corners", "Vert Edges", "Horiz Edges", "Border", "Alternating", "Diagonal", "Rnd Diagonal",
                        "Knights Tour", "Random", "Rnd Choice"]
         self.draw_right_aligned_text(self.basic_font, 'Width: ', pygame.Color('White'),
@@ -133,18 +137,18 @@ class OptionsScene(Scene):
         self.slider4.draw(self.display_surface, pygame.Color('White'))
         self.slider5.draw(self.display_surface, pygame.Color('White'))
 
-    def update(self, start_time=0):
+    def update(self, start_time: int = 0) -> None:
         elapsed = (pygame.time.get_ticks() - start_time) / 1500.0
         self.zero_to_one = ((sin(elapsed) * 0.99) + 1.0) * 0.5
 
-    def render(self):
+    def render(self) -> None:
         # Draw TODO re-add following line
-        # ColourTools.fill_double_gradient(pygame.display.get_surface(), self.colour1, self.colour2, self.zero_to_one)
+        ColourTools.fill_double_gradient(pygame.display.get_surface(), self.colour1, self.colour2, self.zero_to_one)
         self.draw_screen_centered_text("Options", self.title_font, pygame.Color('White'), 5)
         self.draw_sliders()
         self.draw_buttons()
 
-    def handle_events(self, events):
+    def handle_events(self, events: list[pygame.event.Event]) -> None:
         super(OptionsScene, self).handle_events(events)
 
         for event in events:

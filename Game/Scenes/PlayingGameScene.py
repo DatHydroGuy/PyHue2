@@ -1,21 +1,19 @@
+from __future__ import annotations
 import pygame
 
+import Game
 from Game.Scenes.Scene import Scene
 from Game.Shared import GameConstants
 
 
 class PlayingGameScene(Scene):
-    def __init__(self, game):
+    def __init__(self, game: Game.PyHue2) -> None:
         super(PlayingGameScene, self).__init__(game)
-        # self.paused_time = 0
-        # self.pause_start = 0
 
     def setup(self):
         pass
-        # self.paused_time = 0
-        # self.pause_start = 0
 
-    def update(self):
+    def update(self) -> None:
         super(PlayingGameScene, self).update()
         grid = self.get_game().get_grid()
         grid.update()
@@ -29,15 +27,12 @@ class PlayingGameScene(Scene):
                 self.get_game().reset_paused_time()
                 self.get_game().change_scene(4)
 
-    def render(self):
+    def render(self) -> None:
         super(PlayingGameScene, self).render()
         grid = self.get_game().get_grid()
         grid.render()
-        # if self.pause_start == 0:
-        # else:
-        #     pygame.display.get_surface().fill(pygame.Color((50, 20, 80)))
 
-    def handle_events(self, events):
+    def handle_events(self, events: list[pygame.event.Event]) -> None:
         super(PlayingGameScene, self).handle_events(events)
 
         for event in events:
@@ -60,10 +55,7 @@ class PlayingGameScene(Scene):
             if event.type == pygame.ACTIVEEVENT:
                 if event.state == 1:
                     if event.gain == 0:
-                        # self.pause_start = pygame.time.get_ticks()
                         self.get_game().pause_start()
                         self.get_game().change_scene(6)
                     else:
                         pass
-                        # self.paused_time += (pygame.time.get_ticks() - self.pause_start)
-                        # self.pause_start = 0

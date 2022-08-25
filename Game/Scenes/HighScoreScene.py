@@ -1,11 +1,15 @@
+from __future__ import annotations
+from typing import Callable
+
 import pygame
 
+import Game
 from Game.Scenes.Scene import Scene
 from Game.Shared import GameConstants, FileTools
 
 
 class HighScoreScene(Scene):
-    def __init__(self, game):
+    def __init__(self, game: Game.PyHue2) -> None:
         super(HighScoreScene, self).__init__(game)
         self.grid_width = self.get_game().get_grid().get_grid_size()[0]
         self.grid_height = self.get_game().get_grid().get_grid_size()[1]
@@ -27,7 +31,7 @@ class HighScoreScene(Scene):
         self.__pin_text = ["Corners", "Vert Edges", "Horiz Edges", "Border", "Alternating", "Diagonal", "Rnd Diagonal",
                            "Knights Tour", "Random", "Rnd Choice"]
 
-    def setup(self):
+    def setup(self) -> None:
         super(HighScoreScene, self).setup()
         self.__centred = False
         self.__level = self.get_game().get_level()
@@ -40,7 +44,7 @@ class HighScoreScene(Scene):
         self.grid_height = self.get_game().get_grid().get_grid_size()[1]
         self.centre_window_on_screen(GameConstants.SCREEN_SIZE)
 
-    def draw_scores(self):
+    def draw_scores(self) -> None:
         self.draw_screen_centered_text('High Scores', self.title_font, pygame.Color('White'), self.screen_height * 0.05)
         if str(self.__level) == '0':
             self.draw_screen_centered_text(f'Width:{self.grid_width}, Height:{self.grid_height}', self.basic_font,
@@ -63,8 +67,9 @@ class HighScoreScene(Scene):
                                        pygame.Color('Grey'), self.screen_height * 0.78)
 
     @staticmethod
-    def button(button_text, font, colour, top_left_x, top_left_y, width, height,
-               inactive_colour, active_colour, callback=None):
+    def button(button_text: str, font: pygame.font, colour: pygame.Color, top_left_x: int, top_left_y: int, width: int,
+               height: int, inactive_colour: pygame.Color, active_colour: pygame.Color,
+               callback: Callable[[], None] = None) -> None:
         # Taken from https://pythonprogramming.net/pygame-button-function-events/?completed=/pygame-button-function/
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
@@ -82,7 +87,7 @@ class HighScoreScene(Scene):
         text_rectangle.center = ((top_left_x + (width / 2)), (top_left_y + (height / 2)))
         pygame.display.get_surface().blit(text_surface, text_rectangle)
 
-    def draw_buttons(self):
+    def draw_buttons(self) -> None:
         text_surface = self.button_font.render('Play XXXXXXXX', True, pygame.Color('Black'))
         text_rectangle = text_surface.get_rect()
         text_rectangle = text_rectangle.inflate(text_rectangle.width * 0.25, text_rectangle.height * 0.25)
@@ -96,11 +101,11 @@ class HighScoreScene(Scene):
                     text_rectangle.width, text_rectangle.height, pygame.Color('DarkRed'),
                     pygame.Color('Red'), self.back_to_title)
 
-    def back_to_title(self):
+    def back_to_title(self) -> None:
         self.save_score()
         self.get_game().change_scene(0)
 
-    def play_next(self):
+    def play_next(self) -> None:
         self.save_score()
         if str(self.__level) == '0':
             self.get_game().change_scene(1)
@@ -111,11 +116,11 @@ class HighScoreScene(Scene):
             else:
                 self.get_game().change_scene(1)
 
-    def save_score(self):
+    def save_score(self) -> None:
         self.score_file.save_high_scores(self.__level, self.grid_width, self.grid_height,
                                          self.__pastel, self.__spread, self.__pins, self.__moves, self.__time)
 
-    def update(self):
+    def update(self) -> None:
         super(HighScoreScene, self).update()
         if not self.__centred:
             self.centre_window_on_screen(GameConstants.SCREEN_SIZE)
@@ -125,13 +130,13 @@ class HighScoreScene(Scene):
                 self.grid_height)][str(self.__pastel)][str(self.__spread)][str(self.__pins)]
             self.__centred = True
 
-    def render(self):
+    def render(self) -> None:
         super(HighScoreScene, self).render()
         if self.__centred:
             self.draw_scores()
             self.draw_buttons()
 
-    def handle_events(self, events):
+    def handle_events(self, events: list[pygame.event.Event]) -> None:
         super(HighScoreScene, self).handle_events(events)
 
         for event in events:
