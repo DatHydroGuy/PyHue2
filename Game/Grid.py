@@ -22,16 +22,13 @@ class Grid:
                                             global_fade_in=2500, local_fade_out=200, local_fade_in=200)
         self.__solved = False
         self.__shuffled = False
-        self.transition_matrix = self.transition.choose_transition(columns,
-                                                                   rows,
-                                                                   GameConstants.TILE_SIZE[0],
-                                                                   GameConstants.TILE_SIZE[1])
+        self.transition_matrix = self.transition.choose_transition(columns, rows)
         self.fade_out_start = self.transition.global_start
         self.fade_out_end = self.fade_out_start + self.transition.global_fade_out
         self.fade_in_start = self.fade_out_end + self.transition.global_pause
         self.fade_in_end = self.fade_in_start + self.transition.global_fade_in
-        self.__game_grid = [[TileHolder((x, y), [x * GameConstants.TILE_SIZE[0], y * GameConstants.TILE_SIZE[1]],
-                                        (10, 10), False, self.__game, self.transition_matrix[y][x])
+        self.__game_grid = [[TileHolder((x, y), (x * GameConstants.TILE_SIZE[0], y * GameConstants.TILE_SIZE[1]),
+                                        (10, 10), False, self.__game)
                              for x in range(columns)] for y in range(rows)]
         self.generate_corner_colours(corner_colours, pastel, spread)
         gps = GridPinSelector(self.__game_grid)
@@ -198,7 +195,7 @@ class Grid:
                     if not tile_holder.is_solved():
                         self.__incorrect_tiles += 1
             if self.__incorrect_tiles == 0 and not self.__solved:
-                self.__solved_time = pygame.time.get_ticks() - self.__start_time - self.fade_in_end  # - self.__paused_time
+                self.__solved_time = pygame.time.get_ticks() - self.__start_time - self.fade_in_end
                 self.__solved = True
 
     def render(self):

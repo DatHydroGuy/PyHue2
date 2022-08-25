@@ -5,7 +5,8 @@ from random import uniform
 
 class ColourTools:
     @staticmethod
-    def fill_gradient(surface, start_colour, end_colour, rect=None, vertical=True, forward=True):
+    def fill_gradient(surface: pygame.Surface, start_colour: pygame.Color, end_colour: pygame.Color,
+                      rect: pygame.Rect = None, vertical: bool = True, forward: bool = True) -> None:
         """
         Fill a surface with a gradient pattern.
         Inspired by: https://www.pygame.org/wiki/GradientCode
@@ -49,7 +50,8 @@ class ColourTools:
                 pygame.draw.line(surface, colours[col - x1], (col, y1), (col, y2))
 
     @staticmethod
-    def fill_range(range_start, range_end, start_colour, colour_delta):
+    def fill_range(range_start: int, range_end: int, start_colour: pygame.Color,
+                   colour_delta: tuple[int, int, int]) -> list[tuple[int, int, int]]:
         colours = []
         for row in range(range_start, range_end):
             colours.append((
@@ -60,8 +62,9 @@ class ColourTools:
         return colours
 
     @staticmethod
-    def fill_double_gradient(surface, start_colour, end_colour, mirror_position=0.5,
-                             rect=None, vertical=True, forward=True):
+    def fill_double_gradient(surface: pygame.Surface, start_colour: pygame.Color, end_colour: pygame.Color,
+                             mirror_position: float = 0.5, rect: pygame.Rect = None, vertical: bool = True,
+                             forward: bool = True) -> None:
         """
         Fill a surface with a gradient pattern.
         :param surface: Surface to fill.
@@ -98,15 +101,16 @@ class ColourTools:
         ColourTools.fill_gradient(surface, start_colour, end_colour, rect2, vertical, not forward)
 
     @staticmethod
-    def get_random_colour(pastel_factor=0.5):
+    def get_random_colour(pastel_factor: float = 0.5) -> list[float]:
         return [(x + pastel_factor) / (1.0 + pastel_factor) for x in [uniform(0, 1.0) for _ in [1, 2, 3]]]
 
     @staticmethod
-    def colour_distance(c1, c2):
+    def colour_distance(c1: tuple[float, float, float], c2: tuple[float, float, float]) -> float:
         return sum([abs(x[0] - x[1]) for x in zip(c1, c2)])
 
     @staticmethod
-    def generate_new_colour(existing_colours, pastel_factor=0.5, colour_spread=1.0, base_offset=0.0):
+    def generate_new_colour(existing_colours: list[tuple[float, float, float]], pastel_factor: float = 0.5,
+                            colour_spread: float = 1.0, base_offset: float = 0.0) -> tuple[float, float, float]:
         max_distance = None
         best_colour = None
         for _ in range(0, 100):
@@ -122,9 +126,8 @@ class ColourTools:
                 best_colour = colour
         return best_colour
 
-    # noinspection PyArgumentList
     @staticmethod
-    def generate_colour_components(start_colour: pygame.Color, end_colour: pygame.Color, step: float):
+    def generate_colour_components(start_colour: pygame.Color, end_colour: pygame.Color, step: float) -> pygame.Color:
         red = start_colour.r + int(step * (end_colour.r - start_colour.r))
         green = start_colour.g + int(step * (end_colour.g - start_colour.g))
         blue = start_colour.b + int(step * (end_colour.b - start_colour.b))
@@ -132,7 +135,8 @@ class ColourTools:
         return pygame.Color(red, green, blue, alpha)
 
     @staticmethod
-    def blended_text(font, text, colour, background_colour):
+    def blended_text(font: pygame.font, text: str, colour: pygame.Color, background_colour: pygame.Color) ->\
+            pygame.Surface:
         surface = font.render(text, True, colour, background_colour)
         surface.set_colorkey(background_colour)
         return surface

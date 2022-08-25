@@ -7,22 +7,22 @@ from .GameConstants import GameConstants
 
 
 class FileTools:
-    def __init__(self):
+    def __init__(self) -> None:
         self.score_file = os.path.join(GameConstants.ASSET_DIR, GameConstants.SCORE_FILE)
         self.check_for_scores_file()
         self.levels_file = os.path.join(GameConstants.LEVELS_DIR, 'levels01.dat')
 
-    def check_for_scores_file(self):
+    def check_for_scores_file(self) -> None:
         scores_file = Path(self.score_file)
         if not scores_file.is_file():
             with open(scores_file, "w") as write_file:
                 write_file.write('{}')
 
-    def check_for_levels_file(self):
+    def check_for_levels_file(self) -> bool:
         levels_file = Path(self.levels_file)
         return levels_file.is_file()
 
-    def read_level(self, level_number):
+    def read_level(self, level_number: int) -> tuple:
         width = 0
         height = 0
         corner_colours = []
@@ -51,7 +51,7 @@ class FileTools:
             corner_colours = None
         return width, height, corner_colours
 
-    def get_high_scores(self, level, width, height, pastel, spread, pins):
+    def get_high_scores(self, level: int, width: int, height: int, pastel: int, spread: int, pins: int) -> dict:
         with open(self.score_file, "r") as read_file:
             try:
                 scores_dict = json.load(read_file)
@@ -90,7 +90,8 @@ class FileTools:
 
         return scores_dict
 
-    def save_high_scores(self, level, width, height, pastel, spread, pins, moves, seconds):
+    def save_high_scores(self, level: int, width: int, height: int, pastel: int, spread: int, pins: int, moves: int,
+                         seconds: float) -> None:
         saved_dict = self.get_high_scores(level, width, height, pastel, spread, pins)
         curr_stats = saved_dict[str(level)][str(width)][str(height)][str(pastel)][str(spread)][str(pins)]
         new_avg_moves = (curr_stats[1] * curr_stats[0] + moves) / (curr_stats[0] + 1)

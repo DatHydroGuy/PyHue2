@@ -10,10 +10,11 @@ from Game.Shared import GameObject, GameConstants
 class Tile(GameObject):
     state = {"None": 0, "Selected": 1, "FadeOut": 2, "FadeIn": 3}
 
-    def __init__(self, grid_position: tuple, draw_position: list[int], size: tuple, game: Game.PyHue2) -> None:
+    def __init__(self, grid_position: tuple[int, int], draw_position: tuple[int, int], size: tuple[int, int],
+                 game: Game.PyHue2) -> None:
         super(Tile, self).__init__(grid_position, draw_position, size)
         self.__game = game
-        self.__colour = [100, 100, 100]
+        self.__colour = pygame.Color(100, 100, 100)
         self.__state = self.state["None"]
         self.__grid_position = grid_position
         self.__start_time = pygame.time.get_ticks()
@@ -22,10 +23,10 @@ class Tile(GameObject):
     def get_game(self) -> Game.PyHue2:
         return self.__game
 
-    def get_colour(self) -> list[int]:
+    def get_colour(self) -> pygame.Color:
         return self.__colour
 
-    def set_colour(self, new_colour: list[int]) -> None:
+    def set_colour(self, new_colour: pygame.Color) -> None:
         self.__colour = new_colour
 
     def deselect(self) -> None:

@@ -24,7 +24,7 @@ class HighScoreScene(Scene):
         self.__spread = None
         self.__pins = None
         self.__level = None
-        self.__pin_text = ["Corners", "Vert Edges", "Horiz Edges", "Border", "Alternating7", "Diagonal", "Rnd Diagonal",
+        self.__pin_text = ["Corners", "Vert Edges", "Horiz Edges", "Border", "Alternating", "Diagonal", "Rnd Diagonal",
                            "Knights Tour", "Random", "Rnd Choice"]
 
     def setup(self):

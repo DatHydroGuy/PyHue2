@@ -25,7 +25,7 @@ class Scene:
     def setup(self) -> None:
         pass
 
-    def centre_window_on_screen(self, new_window_size: tuple = None) -> None:
+    def centre_window_on_screen(self, new_window_size: tuple[int, int] = None) -> None:
         window_size = new_window_size if new_window_size is not None else \
             (self.__game.num_tiles_horizontally * GameConstants.TILE_SIZE[0],
              self.__game.num_tiles_vertically * GameConstants.TILE_SIZE[1])

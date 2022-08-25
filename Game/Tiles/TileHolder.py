@@ -8,14 +8,13 @@ from Game.Tiles import Tile
 
 
 class TileHolder(GameObject):
-    def __init__(self, grid_position: tuple, draw_position: list[int], size: tuple, is_pinned: bool, game: Game.PyHue2,
-                 transition_times: list[list[int]]) -> None:
+    def __init__(self, grid_position: tuple[int, int], draw_position: tuple[int, int], size: tuple[int, int],
+                 is_pinned: bool, game: Game.PyHue2) -> None:
         super(TileHolder, self).__init__(grid_position, draw_position, size)
         self.__game = game
         self.__tile = Tile(grid_position, draw_position, size, game)
         self.__is_pinned = is_pinned
         self.__correct_tile = self.__tile.get_grid_position()[::-1]
-        self.__transition_times = transition_times
 
     def set_pinned(self, pin_value: bool) -> None:
         self.__is_pinned = pin_value
@@ -39,7 +38,7 @@ class TileHolder(GameObject):
     def deselect(self) -> None:
         self.get_tile().deselect()
 
-    def fade_out(self, timings: list[int], ticks: int) -> None:
+    def fade_out(self, timings: tuple[int, int, int, int], ticks: int) -> None:
         ticks = min(ticks, timings[1])
         if timings[0] <= ticks <= timings[1]:
             self.get_tile().fade_out((ticks - timings[0]) / (timings[1] - timings[0]))
@@ -47,7 +46,7 @@ class TileHolder(GameObject):
     def zero_size(self) -> None:
         self.get_tile().zero_size()
 
-    def fade_in(self, timings: list[int], ticks: int) -> None:
+    def fade_in(self, timings: tuple[int, int, int, int], ticks: int) -> None:
         ticks = min(ticks, timings[1])
         if timings[0] <= ticks <= timings[1]:
             self.get_tile().fade_in((ticks - timings[0]) / (timings[1] - timings[0]))

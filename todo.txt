@@ -16,4 +16,4 @@ DONE add pause function - this should stop the game timer from incrementing when
     additionally, it should prevent the user from seeing the game board as well.  Maybe a blackout or pretty graphics?)
 type hints!
 when pins are on rnd choice, score should reflect the randomly chosen pin config, and not "randomised"
-
+level files need to support pin configuration setting
