@@ -24,6 +24,8 @@ class PyHue2:
         self.shuffle_start = None
         self.colour1 = None
         self.colour2 = None
+        self.__paused_time = 0
+        self.__pause_start = 0
 
         pygame.init()
         pygame.mixer.init()
@@ -42,6 +44,7 @@ class PyHue2:
             PlayingGameScene(self),
             GameOverScene(self),
             HighScoreScene(self),
+            PausedScene(self),
         )
 
         self.__currentScene = 0
@@ -98,6 +101,19 @@ class PyHue2:
 
     def set_time(self, time):
         self.__time = time
+
+    def reset_paused_time(self):
+        self.__paused_time = 0
+
+    def get_paused_time(self):
+        return self.__paused_time
+
+    def pause_start(self):
+        self.__pause_start = pygame.time.get_ticks()
+
+    def pause_end(self):
+        self.__paused_time += (pygame.time.get_ticks() - self.__pause_start)
+        self.__pause_start = 0
 
     def play_sound(self, sound_clip):
         sound = self.__sounds[sound_clip]

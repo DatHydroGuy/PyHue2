@@ -1,8 +1,6 @@
 from random import random, shuffle
 
 from Game.Shared import *
-from Game.Shared.GridPinSelector import GridPinSelector
-from Game.Shared.TransitionCreator import TransitionCreator
 from Game.Tiles import *
 
 
@@ -14,10 +12,12 @@ class Grid:
         self.__rows = rows
         self.__curr_selection = None
         self.__solved_time = 999999999
+        # self.__paused_time = 0
         self.__incorrect_tiles = None
         self.__current_level = 0
         self.__number_of_moves = 0
         self.__start_time = pygame.time.get_ticks()
+        # self.__pause_start_time = 0
         self.transition = TransitionCreator(global_start=1000, global_fade_out=2500, global_pause=500,
                                             global_fade_in=2500, local_fade_out=200, local_fade_in=200)
         self.__solved = False
@@ -50,10 +50,18 @@ class Grid:
     def is_shuffled(self):
         return self.__shuffled
 
+    # def start_pause(self):
+    #     self.__pause_start_time = pygame.time.get_ticks()
+    #
+    # def stop_pause(self):
+    #     self.__paused_time += (pygame.time.get_ticks() - self.__pause_start_time)
+
     def reset(self):
         self.__shuffled = False
         self.__solved = False
         self.__start_time = pygame.time.get_ticks()
+        # self.__pause_start_time = 0
+        # self.__paused_time = 0
         self.fade_out_start = self.transition.global_start
         self.fade_out_end = self.fade_out_start + self.transition.global_fade_out
         self.fade_in_start = self.fade_out_end + self.transition.global_pause
@@ -190,7 +198,7 @@ class Grid:
                     if not tile_holder.is_solved():
                         self.__incorrect_tiles += 1
             if self.__incorrect_tiles == 0 and not self.__solved:
-                self.__solved_time = pygame.time.get_ticks() - self.__start_time - self.fade_in_end
+                self.__solved_time = pygame.time.get_ticks() - self.__start_time - self.fade_in_end  # - self.__paused_time
                 self.__solved = True
 
     def render(self):

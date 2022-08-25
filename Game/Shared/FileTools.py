@@ -3,7 +3,7 @@ import os
 from json import JSONDecodeError
 from pathlib import Path
 
-from Game.Shared import GameConstants
+from .GameConstants import GameConstants
 
 
 class FileTools:

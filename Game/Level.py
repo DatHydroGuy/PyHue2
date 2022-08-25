@@ -1,6 +1,7 @@
+from random import randint
+
 from Game.Grid import Grid
-from Game.Shared import GameConstants
-from Game.Shared.FileTools import FileTools
+from Game.Shared import GameConstants, FileTools
 
 
 class Level:
@@ -10,8 +11,9 @@ class Level:
         self.__game = game
         self.__pastel = pastel
         self.__spread = spread
-        self.__pins = pins
-        self.__game_grid = Grid(game, columns, rows, pastel, spread, pins, corner_colours)
+        self.__pins = randint(GameConstants.GRID_PINS_CORNERS, GameConstants.GRID_PINS_RANDOMISED - 1) if \
+            pins == GameConstants.GRID_PINS_RANDOMISED else pins
+        self.__game_grid = Grid(game, columns, rows, pastel, spread, self.__pins, corner_colours)
         self.__current_level = 0
 
     def __str__(self):

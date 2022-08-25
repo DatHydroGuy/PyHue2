@@ -78,16 +78,18 @@ class TransitionCreator:
 
     @staticmethod
     def __multi_spiral_matrix_core(width, height):
+        odd_width = width % 2
+        odd_height = height % 2
         matrix = [[0] * width for _ in range(height)]
-        sub_matrix_width = width // 2 + 1
-        sub_matrix_height = height // 2 + 1
+        sub_matrix_width = width // 2 + odd_width
+        sub_matrix_height = height // 2 + odd_height
         sub_matrix = TransitionCreator.__spiral_matrix_core(sub_matrix_width, sub_matrix_height, False)
         for row in range(sub_matrix_height):
             for column in range(sub_matrix_width):
                 matrix[row][column] = sub_matrix[row][column]
-                matrix[row][column + sub_matrix_width - 1] = [item[::-1] for item in sub_matrix][row][column]
-                matrix[row + sub_matrix_height - 1][column] = sub_matrix[::-1][row][column]
-                matrix[row + sub_matrix_height - 1][column + sub_matrix_width - 1] = \
+                matrix[row][column + sub_matrix_width - odd_width] = [item[::-1] for item in sub_matrix][row][column]
+                matrix[row + sub_matrix_height - odd_height][column] = sub_matrix[::-1][row][column]
+                matrix[row + sub_matrix_height - odd_height][column + sub_matrix_width - odd_width] = \
                     [item[::-1] for item in sub_matrix[::-1]][row][column]
 
         return matrix
@@ -231,7 +233,7 @@ class TransitionCreator:
     def clock_matrix(self, width, height, number_of_segments=1, cell_width=30, cell_height=30,
                      as_timings=True, reverse=False, mirrored=False):
         matrix = self.__clock_matrix_core(width, height, number_of_segments, cell_width, cell_height)
-        number_of_bands = max(max(matrix)) + 1
+        number_of_bands = max(map(max, matrix)) + 1
         matrix = self.__mirror_matrix(matrix, mirrored)
         self.__reverse_matrix_values(matrix, number_of_bands, reverse)
         self.__convert_matrix_values_to_ticks(matrix, number_of_bands, as_timings)
@@ -267,6 +269,7 @@ class TransitionCreator:
         mirror = choice(range(1)) == 1
         number_of_segments = choice([1, 2, 4])
         double_spiral = choice(range(1)) == 1
+        print(f'{transition_type}|{reverse}|{mirror}|{number_of_segments}|{double_spiral}')
 
         if transition_type == 0:
             return self.diagonal_matrix(width, height, as_timings=True, reverse=reverse, mirrored=mirror)

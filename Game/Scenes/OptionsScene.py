@@ -3,15 +3,14 @@ from math import sin
 import pygame
 
 from Game.Scenes.Scene import Scene
-from ..Shared import GameConstants, ColourTools
-from ..Slider import Slider
+from ..Shared import GameConstants, Slider
 
 
 class OptionsScene(Scene):
     def __init__(self, game):
         super(OptionsScene, self).__init__(game)
         self.sliders = []
-        self.slider_values = [5, 5, 0, 100, 0]
+        self.slider_values = [5, 5, 0, 100, GameConstants.GRID_PINS_RANDOMISED]
         self.slider_draw = [0.3, 0.4, 0.5, 0.6, 0.75]
         self.width = GameConstants.SCREEN_SIZE[0]
         self.height = GameConstants.SCREEN_SIZE[1]
@@ -30,14 +29,15 @@ class OptionsScene(Scene):
         self.slider_max = int(self.width * 0.9)
         self.slider_size = min_dimension * 0.08
         self.slider1 = Slider(self.slider_size, self.slider_min, self.slider_max,
-                              self.height * self.slider_draw[0], 5, 63, 2, self.slider_values[0])
+                              self.height * self.slider_draw[0], 5, 63, 1, self.slider_values[0])
         self.slider2 = Slider(self.slider_size, self.slider_min, self.slider_max,
-                              self.height * self.slider_draw[1], 5, 37, 2, self.slider_values[1])
+                              self.height * self.slider_draw[1], 5, 37, 1, self.slider_values[1])
         self.slider3 = Slider(self.slider_size, self.slider_min, self.slider_max,
                               self.height * self.slider_draw[2], 0, 100, 1, self.slider_values[2])
         self.slider4 = Slider(self.slider_size, self.slider_min, self.slider_max,
                               self.height * self.slider_draw[3], 10, 100, 1, self.slider_values[3])
-        self.slider5 = Slider(self.slider_size, int(self.slider_min * 1.5), self.slider_max, self.height * self.slider_draw[4],
+        self.slider5 = Slider(self.slider_size, int(self.slider_min * 1.5), self.slider_max,
+                              self.height * self.slider_draw[4],
                               GameConstants.GRID_PINS_CORNERS, GameConstants.GRID_PINS_RANDOMISED,
                               1, self.slider_values[4])
         self.sliders.append(self.slider1)

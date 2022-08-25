@@ -1,11 +1,15 @@
+from __future__ import annotations
+
 import pygame
 
+import Game
 from Game.Shared import GameObject
 from Game.Tiles import Tile
 
 
 class TileHolder(GameObject):
-    def __init__(self, grid_position, draw_position, size, is_pinned, game, transition_times):
+    def __init__(self, grid_position: tuple, draw_position: list[int], size: tuple, is_pinned: bool, game: Game.PyHue2,
+                 transition_times: list[list[int]]) -> None:
         super(TileHolder, self).__init__(grid_position, draw_position, size)
         self.__game = game
         self.__tile = Tile(grid_position, draw_position, size, game)
@@ -13,55 +17,55 @@ class TileHolder(GameObject):
         self.__correct_tile = self.__tile.get_grid_position()[::-1]
         self.__transition_times = transition_times
 
-    def set_pinned(self, pin_value):
+    def set_pinned(self, pin_value: bool) -> None:
         self.__is_pinned = pin_value
 
-    def get_pinned(self):
+    def get_pinned(self) -> bool:
         return self.__is_pinned
 
-    def get_tile(self):
+    def get_tile(self) -> Tile:
         return self.__tile
 
-    def set_tile(self, new_tile):
+    def set_tile(self, new_tile: Tile) -> None:
         self.__tile = new_tile
 
-    def is_solved(self):
+    def is_solved(self) -> bool:
         return self.get_tile().get_grid_position() == self.__correct_tile
 
-    def select(self):
+    def select(self) -> None:
         if self.__is_pinned is False:
             self.get_tile().select()
 
-    def deselect(self):
+    def deselect(self) -> None:
         self.get_tile().deselect()
 
-    def fade_out(self, timings, ticks):
+    def fade_out(self, timings: list[int], ticks: int) -> None:
         ticks = min(ticks, timings[1])
         if timings[0] <= ticks <= timings[1]:
             self.get_tile().fade_out((ticks - timings[0]) / (timings[1] - timings[0]))
 
-    def zero_size(self):
+    def zero_size(self) -> None:
         self.get_tile().zero_size()
 
-    def fade_in(self, timings, ticks):
+    def fade_in(self, timings: list[int], ticks: int) -> None:
         ticks = min(ticks, timings[1])
         if timings[0] <= ticks <= timings[1]:
             self.get_tile().fade_in((ticks - timings[0]) / (timings[1] - timings[0]))
 
-    def make_ready(self):
+    def make_ready(self) -> None:
         self.get_tile().make_ready()
 
-    def swap_tiles(self, other):
+    def swap_tiles(self, other: TileHolder) -> None:
         if self.__is_pinned is False and other.__is_pinned is False:
             self.__tile, other.__tile = other.__tile, self.__tile
             temp_draw_position = self.get_tile().get_draw_position()
             self.get_tile().set_draw_position(other.get_tile().get_draw_position())
             other.get_tile().set_draw_position(temp_draw_position)
 
-    def update(self):
+    def update(self) -> None:
         self.get_tile().update()
 
-    def render(self):
+    def render(self) -> None:
         rect = self.get_tile().render()
         if self.__is_pinned:
             pygame.draw.circle(self.__game.screen, pygame.Color('black'), rect.center,

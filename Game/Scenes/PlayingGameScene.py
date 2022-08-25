@@ -7,6 +7,13 @@ from Game.Shared import GameConstants
 class PlayingGameScene(Scene):
     def __init__(self, game):
         super(PlayingGameScene, self).__init__(game)
+        # self.paused_time = 0
+        # self.pause_start = 0
+
+    def setup(self):
+        pass
+        # self.paused_time = 0
+        # self.pause_start = 0
 
     def update(self):
         super(PlayingGameScene, self).update()
@@ -17,15 +24,18 @@ class PlayingGameScene(Scene):
                 # Reshuffle
                 self.get_game().change_scene(2)
             else:
-                # print(grid.get_number_of_moves())
                 self.get_game().set_moves(grid.get_number_of_moves())
-                self.get_game().set_time(grid.get_solved_time())
+                self.get_game().set_time(grid.get_solved_time() - self.get_game().get_paused_time())
+                self.get_game().reset_paused_time()
                 self.get_game().change_scene(4)
 
     def render(self):
         super(PlayingGameScene, self).render()
         grid = self.get_game().get_grid()
         grid.render()
+        # if self.pause_start == 0:
+        # else:
+        #     pygame.display.get_surface().fill(pygame.Color((50, 20, 80)))
 
     def handle_events(self, events):
         super(PlayingGameScene, self).handle_events(events)
@@ -45,3 +55,15 @@ class PlayingGameScene(Scene):
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_ESCAPE:
                     exit()
+
+            # If window loses focus, store the paused time so that we can subtract it from the game time at the end.
+            if event.type == pygame.ACTIVEEVENT:
+                if event.state == 1:
+                    if event.gain == 0:
+                        # self.pause_start = pygame.time.get_ticks()
+                        self.get_game().pause_start()
+                        self.get_game().change_scene(6)
+                    else:
+                        pass
+                        # self.paused_time += (pygame.time.get_ticks() - self.pause_start)
+                        # self.pause_start = 0

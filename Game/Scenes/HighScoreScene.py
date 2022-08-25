@@ -1,8 +1,7 @@
 import pygame
 
 from Game.Scenes.Scene import Scene
-from Game.Shared import GameConstants
-from Game.Shared.FileTools import FileTools
+from Game.Shared import GameConstants, FileTools
 
 
 class HighScoreScene(Scene):
@@ -98,9 +97,11 @@ class HighScoreScene(Scene):
                     pygame.Color('Red'), self.back_to_title)
 
     def back_to_title(self):
+        self.save_score()
         self.get_game().change_scene(0)
 
     def play_next(self):
+        self.save_score()
         if str(self.__level) == '0':
             self.get_game().change_scene(1)
         else:
@@ -109,6 +110,10 @@ class HighScoreScene(Scene):
                 self.get_game().change_scene(2)
             else:
                 self.get_game().change_scene(1)
+
+    def save_score(self):
+        self.score_file.save_high_scores(self.__level, self.grid_width, self.grid_height,
+                                         self.__pastel, self.__spread, self.__pins, self.__moves, self.__time)
 
     def update(self):
         super(HighScoreScene, self).update()
@@ -131,17 +136,10 @@ class HighScoreScene(Scene):
 
         for event in events:
             if event.type == pygame.QUIT:
-                self.score_file.save_high_scores(self.__level, self.grid_width, self.grid_height,
-                                                 self.__pastel, self.__spread, self.__pins, self.__moves, self.__time)
+                self.save_score()
                 exit()
-
-            # if event.type == pygame.MOUSEBUTTONDOWN:
-            #     self.score_file.save_high_scores(self.__level, self.grid_width, self.grid_height,
-            #                                      self.__pastel, self.__spread, self.__pins, self.__moves, self.__time)
-            #     self.get_game().change_scene(0)
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_ESCAPE:
-                    self.score_file.save_high_scores(self.__level, self.grid_width, self.grid_height, self.__pastel,
-                                                     self.__spread, self.__pins, self.__moves, self.__time)
+                    self.save_score()
                     exit()
