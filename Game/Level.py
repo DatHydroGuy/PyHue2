@@ -43,9 +43,16 @@ class Level:
             self.load_random()
         return level_found
 
+    def load_level(self, level_number: int) -> bool:
+        self.__current_level = level_number
+        level_found = False
+        if self.__file.check_for_levels_file():
+            level_found = self.load(self.__current_level)
+        return level_found
+
     def load_options_screen(self) -> None:
         self.__current_level = 0
-        self.__game.change_scene(7)
+        self.__game.change_scene(7)  # LevelsCompleteScene
 
     def load_random(self) -> None:
         self.__current_level = 0

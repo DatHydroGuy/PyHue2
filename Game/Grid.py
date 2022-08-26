@@ -50,8 +50,8 @@ class Grid:
     def is_shuffled(self) -> bool:
         return self.__shuffled
 
-    def reset(self) -> None:
-        self.__shuffled = False
+    def reset(self, preview: bool = False) -> None:
+        self.__shuffled = preview
         self.__solved = False
         self.__start_time = pygame.time.get_ticks()
         self.fade_out_start = GameConstants.FADE_OUT_START

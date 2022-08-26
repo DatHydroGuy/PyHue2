@@ -20,8 +20,8 @@ class TitleScene(Scene):
         self.colour3 = pygame.Color(*[int(256 * x) for x in colour3])
         self.loop = True
         self.heart = '♥'  # Use Alt + Numeric pad 3 key
-        self.width = GameConstants.SCREEN_SIZE[0]
-        self.height = GameConstants.SCREEN_SIZE[1]
+        self.width = GameConstants.WINDOW_SIZE[0]
+        self.height = GameConstants.WINDOW_SIZE[1]
         self.zero_to_one1 = 0
         self.zero_to_one2 = 0
 
@@ -80,10 +80,10 @@ class TitleScene(Scene):
                 exit()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                self.get_game().change_scene(1)
+                self.get_game().change_scene(1)  # OptionsScene
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_ESCAPE:
                     exit()
                 else:
-                    self.get_game().change_scene(1)
+                    self.get_game().change_scene(1)  # OptionsScene

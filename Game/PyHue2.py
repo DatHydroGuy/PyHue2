@@ -34,7 +34,7 @@ class PyHue2:
 
         self.__clock = pygame.time.Clock()
 
-        window_size = GameConstants.SCREEN_SIZE
+        window_size = GameConstants.WINDOW_SIZE
         self.screen = pygame.display.set_mode(window_size, pygame.DOUBLEBUF, 32)
         self.pg_window = Window.from_display_module()
 
@@ -47,6 +47,7 @@ class PyHue2:
             HighScoreScene(self),
             PausedScene(self),
             LevelsCompleteScene(self),
+            LevelPickerScene(self),
         )
 
         self.__currentScene = 0
@@ -90,7 +91,7 @@ class PyHue2:
             pass
         else:
             # play level from file
-            self.__level = Level(self, 5, 5)
+            self.__level = Level(self, GameConstants.MIN_GRID_COLUMNS, GameConstants.MIN_GRID_ROWS)
             self.__level.load(level_num)
 
     def get_moves(self) -> int:

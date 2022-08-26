@@ -66,7 +66,7 @@ class Scene:
     def draw_screen_centered_text(text: str, font: pygame.font.Font, colour: pygame.Color, y_position: int = 0) -> None:
         text_surface = font.render(text, True, colour)
         text_rectangle = text_surface.get_rect()
-        text_rectangle.midtop = (GameConstants.SCREEN_SIZE[0] / 2, y_position)
+        text_rectangle.midtop = (GameConstants.WINDOW_SIZE[0] / 2, y_position)
         pygame.display.get_surface().blit(text_surface, text_rectangle)
 
     @staticmethod

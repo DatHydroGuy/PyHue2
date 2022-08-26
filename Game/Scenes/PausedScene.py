@@ -10,8 +10,8 @@ from ..Shared import GameConstants, ColourTools
 class PausedScene(Scene):
     def __init__(self, game: Game.PyHue2) -> None:
         super(PausedScene, self).__init__(game)
-        self.width = GameConstants.SCREEN_SIZE[0]
-        self.height = GameConstants.SCREEN_SIZE[1]
+        self.width = GameConstants.WINDOW_SIZE[0]
+        self.height = GameConstants.WINDOW_SIZE[1]
         self.zero_to_one = 0
         self.colour1 = None
         self.colour2 = None
@@ -70,7 +70,7 @@ class PausedScene(Scene):
                         pass
                     else:
                         self.get_game().pause_end()
-                        self.get_game().change_scene(3)
+                        self.get_game().change_scene(3)  # PlayingGameScene
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_ESCAPE:

@@ -10,9 +10,9 @@ from Game.Shared import GameConstants
 class LevelsCompleteScene(Scene):
     def __init__(self, game: Game.PyHue2) -> None:
         super(LevelsCompleteScene, self).__init__(game)
-        self.screen_width = GameConstants.SCREEN_SIZE[0]
-        self.screen_height = GameConstants.SCREEN_SIZE[1]
-        min_dimension = min(GameConstants.SCREEN_SIZE[0], GameConstants.SCREEN_SIZE[1])
+        self.screen_width = GameConstants.WINDOW_SIZE[0]
+        self.screen_height = GameConstants.WINDOW_SIZE[1]
+        min_dimension = min(GameConstants.WINDOW_SIZE[0], GameConstants.WINDOW_SIZE[1])
         self.title_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.12))
         self.basic_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.06))
         self.button_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.045))
@@ -21,7 +21,7 @@ class LevelsCompleteScene(Scene):
     def setup(self) -> None:
         super(LevelsCompleteScene, self).setup()
         self.__centred = False
-        self.centre_window_on_screen(GameConstants.SCREEN_SIZE)
+        self.centre_window_on_screen(GameConstants.WINDOW_SIZE)
 
     def draw_scores(self) -> None:
         self.draw_screen_centered_text('Congratulations!', self.title_font, pygame.Color('White'),
@@ -39,6 +39,7 @@ class LevelsCompleteScene(Scene):
                     self.screen_width * 0.5 - text_rectangle.width // 2, self.screen_height * 0.6,
                     text_rectangle.width, text_rectangle.height, pygame.Color('DarkGreen'),
                     pygame.Color('Green'), self.play_next)
+        # TODO: make the following button point to the level editor when it's done
         self.button('Create New Level', self.button_font, pygame.Color('Black'),
                     self.screen_width * 0.5 - text_rectangle.width // 2, self.screen_height * 0.75,
                     text_rectangle.width, text_rectangle.height, pygame.Color('DarkGreen'),
@@ -49,15 +50,15 @@ class LevelsCompleteScene(Scene):
                     pygame.Color('Red'), self.back_to_title)
 
     def back_to_title(self) -> None:
-        self.get_game().change_scene(0)
+        self.get_game().change_scene(0)  # TitleScene
 
     def play_next(self) -> None:
-        self.get_game().change_scene(1)
+        self.get_game().change_scene(1)  # OptionsScene
 
     def update(self) -> None:
         super(LevelsCompleteScene, self).update()
         if not self.__centred:
-            self.centre_window_on_screen(GameConstants.SCREEN_SIZE)
+            self.centre_window_on_screen(GameConstants.WINDOW_SIZE)
             self.__centred = True
 
     def render(self) -> None:

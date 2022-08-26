@@ -20,12 +20,12 @@ class PlayingGameScene(Scene):
         if grid.is_solved():
             if grid.get_number_of_moves() == 0:
                 # Reshuffle
-                self.get_game().change_scene(2)
+                self.get_game().change_scene(2)  # ShuffleScene
             else:
                 self.get_game().set_moves(grid.get_number_of_moves())
                 self.get_game().set_time(grid.get_solved_time() - self.get_game().get_paused_time())
                 self.get_game().reset_paused_time()
-                self.get_game().change_scene(4)
+                self.get_game().change_scene(4)  # GameOverScene
 
     def render(self) -> None:
         super(PlayingGameScene, self).render()
@@ -56,6 +56,6 @@ class PlayingGameScene(Scene):
                 if event.state == 1:
                     if event.gain == 0:
                         self.get_game().pause_start()
-                        self.get_game().change_scene(6)
+                        self.get_game().change_scene(6)  # PausedScene
                     else:
                         pass
