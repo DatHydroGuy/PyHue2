@@ -71,5 +71,5 @@ class Level:
         else:
             self.__game.set_size(width, height)
             self.__game_grid = Grid(self.__game, width, height, self.__pastel, self.__spread, pins,
-                                    corner_colours)
+                                    corner_colours, True)
             return True

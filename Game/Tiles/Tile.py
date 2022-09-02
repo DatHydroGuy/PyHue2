@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import math
 
 import pygame
@@ -11,7 +12,7 @@ class Tile(GameObject):
     state = {"None": 0, "Selected": 1, "FadeOut": 2, "FadeIn": 3}
 
     def __init__(self, grid_position: tuple[int, int], draw_position: tuple[int, int], size: tuple[int, int],
-                 game: Game.PyHue2) -> None:
+                 game: Game.PyHue2, preview: bool = False) -> None:
         super(Tile, self).__init__(grid_position, draw_position, size)
         self.__game = game
         self.__colour = pygame.Color(100, 100, 100)
@@ -19,6 +20,7 @@ class Tile(GameObject):
         self.__grid_position = grid_position
         self.__start_time = pygame.time.get_ticks()
         self.__inflate = 0
+        self.__preview = preview
 
     def get_game(self) -> Game.PyHue2:
         return self.__game
@@ -83,7 +85,10 @@ class Tile(GameObject):
             if self.get_size()[0] >= GameConstants.TILE_SIZE[0]:
                 self.__inflate = 0
                 self.__state = self.state["None"]
-        self.set_size((GameConstants.TILE_SIZE[0] + self.__inflate, GameConstants.TILE_SIZE[1] + self.__inflate))
+        if self.__preview:
+            self.set_size((self.get_size()[0] + self.__inflate, self.get_size()[1] + self.__inflate))
+        else:
+            self.set_size((GameConstants.TILE_SIZE[0] + self.__inflate, GameConstants.TILE_SIZE[1] + self.__inflate))
 
     def render(self) -> pygame.Rect:
         tile_image = self.get_image()

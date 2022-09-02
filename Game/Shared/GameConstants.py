@@ -34,6 +34,9 @@ class GameConstants:
     """ User section: Feel free to play around with these to suit your own needs. """
     SCREEN_SIZE = [1920, 1200]
     WINDOW_SIZE = [800, 600]
+    PREVIEW_SIZE = [int(WINDOW_SIZE[0] * 0.75), int(WINDOW_SIZE[1] * 0.75)]
+    PREVIEW_X_OFFSET = int(WINDOW_SIZE[0] * 0.125)
+    PREVIEW_Y_OFFSET = 50
     TILE_SIZE = [30, 30]
     MIN_GRID_COLUMNS = 5
     MAX_GRID_COLUMNS = SCREEN_SIZE[0] / TILE_SIZE[0] if (SCREEN_SIZE[0] / TILE_SIZE[0]) % 2 == 1 else\

@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from random import random, shuffle
 
 from Game.Shared import *
@@ -7,7 +8,8 @@ from Game.Tiles import *
 
 class Grid:
     def __init__(self, game: Game.PyHue2, columns: int, rows: int, pastel: float = 0.5, spread: float = 1.0,
-                 pins: int = GameConstants.GRID_PINS_RANDOMISED, corner_colours: list[pygame.Color] = None) -> None:
+                 pins: int = GameConstants.GRID_PINS_RANDOMISED, corner_colours: list[pygame.Color] = None,
+                 preview: bool = False) -> None:
         self.__game = game
         self.__columns = columns
         self.__rows = rows
@@ -19,6 +21,12 @@ class Grid:
         self.__start_time = pygame.time.get_ticks()
         self.__solved = False
         self.__shuffled = False
+        self.__preview = preview
+        pixels_per_tile = int(min(GameConstants.WINDOW_SIZE[0] / columns, GameConstants.WINDOW_SIZE[1] / rows, 30))
+        self.scaled_tile_size = (pixels_per_tile, pixels_per_tile)
+        self.__preview_x_offset = (GameConstants.WINDOW_SIZE[0] - self.scaled_tile_size[
+            0] * columns) // 2 if preview else 0
+        self.__tile_size = self.scaled_tile_size if preview else GameConstants.TILE_SIZE
         self.transition = TransitionCreator(global_start=GameConstants.FADE_OUT_START,
                                             global_fade_out=GameConstants.FADE_OUT_DURATION,
                                             global_pause=GameConstants.FADE_PAUSE,
@@ -30,13 +38,14 @@ class Grid:
         self.fade_out_end = self.fade_out_start + GameConstants.FADE_OUT_DURATION
         self.fade_in_start = self.fade_out_end + GameConstants.FADE_PAUSE
         self.fade_in_end = self.fade_in_start + GameConstants.FADE_IN_DURATION
-        self.__game_grid = [[TileHolder((x, y), (x * GameConstants.TILE_SIZE[0], y * GameConstants.TILE_SIZE[1]),
-                                        (10, 10), False, self.__game)
-                             for x in range(columns)] for y in range(rows)]
+        self.__game_grid = [
+            [TileHolder((x, y), (self.__preview_x_offset + x * self.__tile_size[0], y * self.__tile_size[1]),
+                        self.__tile_size, False, self.__game, preview)
+             for x in range(columns)] for y in range(rows)]
         self.generate_corner_colours(corner_colours, pastel, spread)
         gps = GridPinSelector(self.__game_grid)
         gps.generate_grid_pins(pins)
-        self.generate_tile_array(GameConstants.TILE_SIZE)
+        self.generate_tile_array(self.__tile_size)
 
     def get_grid_size(self) -> tuple[int, int]:
         return self.__columns, self.__rows
@@ -50,8 +59,8 @@ class Grid:
     def is_shuffled(self) -> bool:
         return self.__shuffled
 
-    def reset(self, preview: bool = False) -> None:
-        self.__shuffled = preview
+    def reset(self) -> None:
+        self.__shuffled = self.__preview
         self.__solved = False
         self.__start_time = pygame.time.get_ticks()
         self.fade_out_start = GameConstants.FADE_OUT_START
@@ -102,8 +111,9 @@ class Grid:
             for column in range(self.__columns):
                 col_step = column / float(self.__columns - 1)
                 colour = ColourTools.generate_colour_components(start_colour, end_colour, col_step)
-                tile_rect = pygame.Rect(column * cell_width, row * cell_height, cell_width, cell_height)
-                tile = Tile((row, column), tile_rect.topleft, (cell_width, cell_height), self.__game)
+                tile_rect = pygame.Rect(self.__preview_x_offset + column * cell_width, row * cell_height, cell_width,
+                                        cell_height)
+                tile = Tile((row, column), tile_rect.topleft, (cell_width, cell_height), self.__game, self.__preview)
                 tile.set_colour(colour)
                 self.__game_grid[row][column].set_tile(tile)
 
