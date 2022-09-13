@@ -22,10 +22,10 @@ class OptionsScene(Scene):
 
         self.display_surface = pygame.display.get_surface()
         min_dimension = min(self.width, self.height)
-        self.basic_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.08))
-        self.button_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.045))
-        self.score_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.04))
-        self.title_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.18))
+        self.basic_font = self.create_font(int(min_dimension * 0.08))
+        self.button_font = self.create_font(int(min_dimension * 0.045))
+        self.score_font = self.create_font(int(min_dimension * 0.04))
+        self.title_font = self.create_font(int(min_dimension * 0.18))
 
         self.slider_min = int(self.width * 0.45)
         self.slider_max = int(self.width * 0.9)

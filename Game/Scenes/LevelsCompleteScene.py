@@ -13,9 +13,9 @@ class LevelsCompleteScene(Scene):
         self.screen_width = GameConstants.WINDOW_SIZE[0]
         self.screen_height = GameConstants.WINDOW_SIZE[1]
         min_dimension = min(GameConstants.WINDOW_SIZE[0], GameConstants.WINDOW_SIZE[1])
-        self.title_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.12))
-        self.basic_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.06))
-        self.button_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.045))
+        self.title_font = self.create_font(int(min_dimension * 0.12))
+        self.basic_font = self.create_font(int(min_dimension * 0.06))
+        self.button_font = self.create_font(int(min_dimension * 0.045))
         self.__centred = False
 
     def setup(self) -> None:

@@ -29,6 +29,9 @@ class Scene:
         pass
 
     @staticmethod
+    def create_font(size: float) -> pygame.font.Font:
+        return pygame.font.Font('freesansbold.ttf', size)
+    @staticmethod
     def update_colours(divisor: float, start_time: int = 0) -> float:
         elapsed = (pygame.time.get_ticks() - start_time) / divisor
         return ((sin(elapsed) * 0.99) + 1.0) * 0.5

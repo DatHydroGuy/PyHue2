@@ -26,8 +26,8 @@ class TitleScene(Scene):
         self.zero_to_one2 = 0
 
         min_dimension = min(self.width, self.height)
-        self.basic_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.06))
-        self.title_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.35))
+        self.basic_font = self.create_font(int(min_dimension * 0.06))
+        self.title_font = self.create_font(int(min_dimension * 0.35))
         self.heart_font = pygame.font.Font(os.path.join(GameConstants.ASSET_DIR, GameConstants.SYM_FONT_FILE),
                                            int(min_dimension * 0.43))
         self.text_surface = self.title_font.render('I    Hue', True, pygame.Color('White'))

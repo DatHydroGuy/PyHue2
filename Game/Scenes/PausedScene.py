@@ -28,7 +28,7 @@ class PausedScene(Scene):
         self.display_surface = pygame.display.get_surface()
         self.width, self.height = self.display_surface.get_size()
         min_dimension = min(self.width, self.height)
-        self.title_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.23))
+        self.title_font = self.create_font(int(min_dimension * 0.23))
         self.text_surface = self.title_font.render('PAUSED', True, pygame.Color('White'))
         self.merged_surface = self.text_surface.copy()
 
