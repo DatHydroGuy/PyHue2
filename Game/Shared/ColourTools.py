@@ -1,12 +1,13 @@
-import pygame
 import colorsys
 from random import uniform
+
+import pygame
 
 
 class ColourTools:
     @staticmethod
     def fill_gradient(surface: pygame.Surface, start_colour: pygame.Color, end_colour: pygame.Color,
-                      rect: pygame.Rect = None, vertical: bool = True, forward: bool = True) -> None:
+                      rect: pygame.rect.Rect = None, vertical: bool = True, forward: bool = True) -> None:
         """
         Fill a surface with a gradient pattern.
         Inspired by: https://www.pygame.org/wiki/GradientCode
@@ -19,10 +20,12 @@ class ColourTools:
         :return: None.
         """
         if rect is None:
-            rect = surface.get_rect()
-
-        x1, x2 = rect.left, rect.right
-        y1, y2 = rect.top, rect.bottom
+            temp_rect = surface.get_rect()
+            x1, x2 = temp_rect.left, temp_rect.right
+            y1, y2 = temp_rect.top, temp_rect.bottom
+        else:
+            x1, x2 = rect.left, rect.right
+            y1, y2 = rect.top, rect.bottom
 
         if vertical:
             h = y2 - y1
@@ -51,13 +54,13 @@ class ColourTools:
 
     @staticmethod
     def fill_range(range_start: int, range_end: int, start_colour: pygame.Color,
-                   colour_delta: tuple[int, int, int]) -> list[tuple[int, int, int]]:
+                   colour_delta: tuple[float, float, float]) -> list[tuple[int, int, int]]:
         colours = []
         for row in range(range_start, range_end):
             colours.append((
-                min(max(start_colour[0] + (colour_delta[0] * (row - range_start)), 0), 255),
-                min(max(start_colour[1] + (colour_delta[1] * (row - range_start)), 0), 255),
-                min(max(start_colour[2] + (colour_delta[2] * (row - range_start)), 0), 255)
+                min(max(int(start_colour[0] + (colour_delta[0] * (row - range_start))), 0), 255),
+                min(max(int(start_colour[1] + (colour_delta[1] * (row - range_start))), 0), 255),
+                min(max(int(start_colour[2] + (colour_delta[2] * (row - range_start))), 0), 255)
             ))
         return colours
 
@@ -77,19 +80,21 @@ class ColourTools:
         :return: None.
         """
         if rect is None:
-            rect = surface.get_rect()
-
-        x1, x2 = rect.left, rect.right
-        y1, y2 = rect.top, rect.bottom
+            temp_rect = surface.get_rect()
+            x1, x2 = temp_rect.left, temp_rect.right
+            y1, y2 = temp_rect.top, temp_rect.bottom
+        else:
+            x1, x2 = rect.left, rect.right
+            y1, y2 = rect.top, rect.bottom
 
         if vertical:
             h = y2 - y1
-            rect1 = pygame.Rect(x1, y1, x2 - x1, h * mirror_position)
-            rect2 = pygame.Rect(x1, y1 + h * mirror_position, x2 - x1, h * (1 - mirror_position))
+            rect1 = pygame.rect.Rect(x1, y1, x2 - x1, h * mirror_position)
+            rect2 = pygame.rect.Rect(x1, y1 + h * mirror_position, x2 - x1, h * (1 - mirror_position))
         else:
             h = x2 - x1
-            rect1 = pygame.Rect(x1, y1, h * mirror_position, y2 - y1)
-            rect2 = pygame.Rect(x1 + h * mirror_position, y1, h * (1 - mirror_position), y2 - y1)
+            rect1 = pygame.rect.Rect(x1, y1, h * mirror_position, y2 - y1)
+            rect2 = pygame.rect.Rect(x1 + h * mirror_position, y1, h * (1 - mirror_position), y2 - y1)
 
         if rect1.height == 0:
             rect1 = rect1.inflate(0, 1)
@@ -135,7 +140,7 @@ class ColourTools:
         return pygame.Color(red, green, blue, alpha)
 
     @staticmethod
-    def blended_text(font: pygame.font, text: str, colour: pygame.Color, background_colour: pygame.Color) ->\
+    def blended_text(font: pygame.font, text: str, colour: pygame.Color, background_colour: pygame.Color) -> \
             pygame.Surface:
         surface = font.render(text, True, colour, background_colour)
         surface.set_colorkey(background_colour)

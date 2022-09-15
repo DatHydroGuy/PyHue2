@@ -38,16 +38,9 @@ class Level:
         self.__current_level += 1
         level_found = False
         if self.__file.check_for_levels_file():
-            level_found = self.load(self.__current_level)
+            level_found = self.load_level(self.__current_level, True)
         else:
             self.load_random()
-        return level_found
-
-    def load_level(self, level_number: int) -> bool:
-        self.__current_level = level_number
-        level_found = False
-        if self.__file.check_for_levels_file():
-            level_found = self.load(self.__current_level)
         return level_found
 
     def load_options_screen(self) -> None:
@@ -61,7 +54,7 @@ class Level:
         self.__game.set_size(width, height)
         self.__game_grid = Grid(self.__game, width, height, self.__pastel, self.__spread, self.__pins)
 
-    def load(self, level_number: int) -> bool:
+    def load_level(self, level_number: int, is_from_preview: bool) -> bool:
         self.__current_level = level_number
         width, height, pins, corner_colours = self.__file.read_level(level_number)
         if width == -1 or height == -1 or pins == -1 or corner_colours is None:
@@ -71,5 +64,5 @@ class Level:
         else:
             self.__game.set_size(width, height)
             self.__game_grid = Grid(self.__game, width, height, self.__pastel, self.__spread, pins,
-                                    corner_colours, True)
+                                    corner_colours, not is_from_preview)
             return True

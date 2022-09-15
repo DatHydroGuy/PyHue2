@@ -39,11 +39,11 @@ class GameConstants:
     PREVIEW_Y_OFFSET = 50
     TILE_SIZE = [30, 30]
     MIN_GRID_COLUMNS = 5
-    MAX_GRID_COLUMNS = SCREEN_SIZE[0] / TILE_SIZE[0] if (SCREEN_SIZE[0] / TILE_SIZE[0]) % 2 == 1 else\
+    MAX_GRID_COLUMNS = SCREEN_SIZE[0] / TILE_SIZE[0] if (SCREEN_SIZE[0] / TILE_SIZE[0]) % 2 == 1 else \
         (SCREEN_SIZE[0] / TILE_SIZE[0]) - 1
     MIN_GRID_ROWS = 5
     # NOTE: In the next line, the -2 allows space for the window title bar and the Windows taskbar
-    MAX_GRID_ROWS = (SCREEN_SIZE[1] / TILE_SIZE[1]) - 2 if (SCREEN_SIZE[1] / TILE_SIZE[1]) % 2 == 1 else\
+    MAX_GRID_ROWS = (SCREEN_SIZE[1] / TILE_SIZE[1]) - 2 if (SCREEN_SIZE[1] / TILE_SIZE[1]) % 2 == 1 else \
         (SCREEN_SIZE[1] / TILE_SIZE[1]) - 3
     MIN_PASTEL = 0
     MAX_PASTEL = 100
@@ -53,3 +53,4 @@ class GameConstants:
     DEFAULT_HEIGHT = 5
     DEFAULT_PASTEL = 0
     DEFAULT_SPREAD = 100
+    MIN_TIME_BETWEEN_BUTTON_CLICKS = 250

@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+from typing import Callable
+
 import pygame
 
 import Game
 from Game.Scenes.Scene import Scene
-from Game.Shared import GameConstants
+from Game.Shared import GameConstants, FileTools
 
 
 class LevelPickerScene(Scene):
@@ -18,23 +20,43 @@ class LevelPickerScene(Scene):
         min_dimension = min(self.width, self.height)
         self.button_font = self.create_font(int(min_dimension * 0.045))
         self.__level_num = level_num
+        self.__file = FileTools()
+        self.__max_level = -1
 
     def setup(self) -> None:
         super(LevelPickerScene, self).setup()
         self.centre_window_on_screen(GameConstants.WINDOW_SIZE)
-        self.get_game().load_level(1)
+        self.set_grid_for_preview()
+        # self.get_game().load_level(1)
+        # grid = self.get_game().get_grid()
+        # grid.reset()
+        # self.fake_screen = pygame.display.get_surface().copy()
+        self.__max_level = self.__file.count_levels_in_file()
+
+    def set_grid_for_preview(self):
+        self.get_game().load_level(self.__level_num)
         grid = self.get_game().get_grid()
         grid.reset()
         self.fake_screen = pygame.display.get_surface().copy()
 
     def draw_buttons(self) -> None:
-        self.draw_button_group(['< Prev', 'Play', 'Next >'], [(0.2, 0.72), (0.5, 0.72), (0.8, 0.72)],
-                               [pygame.Color('DarkGreen')] * 3, [pygame.Color('Green')] * 3)
+        if self.__level_num == 1:
+            self.draw_button_group(['Play', 'Next >'], [(0.5, 0.72), (0.8, 0.72)],
+                                   [pygame.Color('DarkGreen')] * 2, [pygame.Color('Green')] * 2,
+                                   [self.play_level, self.next_level])
+        elif self.__level_num == self.__max_level:
+            self.draw_button_group(['< Prev', 'Play'], [(0.2, 0.72), (0.5, 0.72)],
+                                   [pygame.Color('DarkGreen')] * 2, [pygame.Color('Green')] * 2,
+                                   [self.previous_level, self.play_level])
+        else:
+            self.draw_button_group(['< Prev', 'Play', 'Next >'], [(0.2, 0.72), (0.5, 0.72), (0.8, 0.72)],
+                                   [pygame.Color('DarkGreen')] * 3, [pygame.Color('Green')] * 3,
+                                   [self.previous_level, self.play_level, self.next_level])
         self.draw_button_group(['Back to Options screen'], [(0.5, 0.88)], [pygame.Color('DarkRed')],
-                               [pygame.Color('Red')])
+                               [pygame.Color('Red')], [self.options_screen])
 
     def draw_button_group(self, text: list[str], coords: list[tuple[float, float]], colour: list[pygame.Color],
-                          hover_colour: list[pygame.Color]) -> None:
+                          hover_colour: list[pygame.Color], callback: list[Callable[[], None]]) -> None:
         max_text = max(text, key=len)
         text_surface = self.button_font.render(max_text, True, pygame.Color('Black'))
         text_rectangle = text_surface.get_rect()
@@ -42,16 +64,22 @@ class LevelPickerScene(Scene):
         for i, button_text in enumerate(text):
             self.button(button_text, self.button_font, pygame.Color('Black'),
                         self.width * coords[i][0] - text_rectangle.width // 2, self.height * coords[i][1],
-                        text_rectangle.width, text_rectangle.height, colour[i], hover_colour[i], self.options_screen)
+                        text_rectangle.width, text_rectangle.height, colour[i], hover_colour[i], callback[i])
 
     def previous_level(self) -> None:
-        pass
+        if self.check_button_click() and self.__level_num > 1:
+            self.__level_num -= 1
+            self.set_grid_for_preview()
 
     def play_level(self) -> None:
-        pass
+        self.get_game().get_level().load_level(self.__level_num, True)
+        self.get_game().shuffle_start = pygame.time.get_ticks()
+        self.get_game().change_scene(2)  # ShuffleScene
 
     def next_level(self) -> None:
-        pass
+        if self.check_button_click() and self.__level_num < self.__max_level:
+            self.__level_num += 1
+            self.set_grid_for_preview()
 
     def options_screen(self) -> None:
         self.get_game().change_scene(1)  # OptionsScene

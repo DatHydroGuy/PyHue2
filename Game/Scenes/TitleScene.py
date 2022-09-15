@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import os
 from random import uniform
 
@@ -43,7 +44,7 @@ class TitleScene(Scene):
         self.draw_screen_centered_text('Press Esc to exit.', font=self.basic_font,
                                        colour=self.colour3, y_position=int(self.height * 0.8))
 
-    def create_gradient_text(self, start_colour: pygame.Color, end_colour: pygame.Color, zero_to_one: float) ->\
+    def create_gradient_text(self, start_colour: pygame.Color, end_colour: pygame.Color, zero_to_one: float) -> \
             pygame.Surface:
         text_rect = self.merged_surface.get_rect()
         text_gradient_surf = self.merged_surface.copy()

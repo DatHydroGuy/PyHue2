@@ -50,7 +50,8 @@ class PyHue2:
             LevelPickerScene(self),
         )
 
-        self.__currentScene = 0
+        self.__current_scene = 0
+        self.__scene_time = pygame.time.get_ticks()
 
         self.__sounds = ()
 
@@ -60,7 +61,7 @@ class PyHue2:
 
             self.screen.fill((0, 0, 0))
 
-            current_scene = self.__scenes[self.__currentScene]
+            current_scene = self.__scenes[self.__current_scene]
             current_scene.handle_events(pygame.event.get())
             current_scene.update()
             current_scene.render()
@@ -68,8 +69,11 @@ class PyHue2:
             pygame.display.update()
 
     def change_scene(self, scene: int) -> None:
-        self.__currentScene = scene
-        self.__scenes[self.__currentScene].setup()
+        # Prevent buttons from multi-switching between scenes
+        if pygame.time.get_ticks() - self.__scene_time > GameConstants.MIN_TIME_BETWEEN_BUTTON_CLICKS:
+            self.__current_scene = scene
+            self.__scenes[self.__current_scene].setup()
+            self.__scene_time = pygame.time.get_ticks()
 
     def set_size(self, width: int, height: int) -> None:
         self.num_tiles_horizontally = width
@@ -92,7 +96,7 @@ class PyHue2:
         else:
             # play level from file
             self.__level = Level(self, GameConstants.MIN_GRID_COLUMNS, GameConstants.MIN_GRID_ROWS)
-            self.__level.load(level_num)
+            self.__level.load_level(level_num, False)
 
     def get_moves(self) -> int:
         return self.__moves

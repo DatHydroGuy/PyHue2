@@ -22,6 +22,17 @@ class FileTools:
         levels_file = Path(self.levels_file)
         return levels_file.is_file()
 
+    def count_levels_in_file(self) -> int:
+        try:
+            with open(self.levels_file, "r") as read_file:
+                try:
+                    levels_data = read_file.readlines()
+                    return len(levels_data) - 1
+                except IndexError:
+                    return -1
+        except FileNotFoundError:
+            return -1
+
     def read_level(self, level_number: int) -> tuple:
         width = 0
         height = 0
@@ -46,12 +57,12 @@ class FileTools:
                     width = -1
                     height = -1
                     pins = -1
-                    corner_colours = None
+                    corner_colours = [(-1,)]
         except FileNotFoundError:
             width = -1
             height = -1
             pins = -1
-            corner_colours = None
+            corner_colours = [(-1,)]
         return width, height, pins, corner_colours
 
     def get_high_scores(self, level: int, width: int, height: int, pastel: int, spread: int, pins: int) -> dict:
