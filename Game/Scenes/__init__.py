@@ -1,6 +1,7 @@
 from Game.Scenes.GameOverScene import GameOverScene
 from Game.Scenes.HighScoreScene import HighScoreScene
 from Game.Scenes.LevelsCompleteScene import LevelsCompleteScene
+from Game.Scenes.LevelPickerScene import LevelPickerScene
 from Game.Scenes.OptionsScene import OptionsScene
 from Game.Scenes.PausedScene import PausedScene
 from Game.Scenes.PlayingGameScene import PlayingGameScene

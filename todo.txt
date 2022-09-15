@@ -15,8 +15,11 @@ DONE type hints!
 DONE when pins are on rnd choice, score should reflect the randomly chosen pin config, and not "randomised"
 DONE level files need to support pin configuration setting
 DONE move transition timing values to GameConstants
+DONE create a level picker which shows previews of pre-defined levels
 
+random diagonal scoring should be separated by the distance between the diagonals: a gap of 10 is harder than a gap of 3
+on highscore screen, "play random" button should load another random level with current settings
 when levels01.dat is completed, show user a "You have completed..." screen with an option to quit or load a random level
 create a level designer? (complete with custom pin designer?)
-create a level picker which shows previews of pre-defined levels, and whether the user has completed them or not
+update level picker so that only completed levels (plus the next one) are available to play
 push as many class variables into __dunder variables as possible

@@ -18,7 +18,7 @@ class ShuffleScene(Scene):
         super(ShuffleScene, self).update()
         grid = self.get_game().get_grid()
         if grid.is_shuffled():
-            self.get_game().change_scene(3)
+            self.get_game().change_scene(3)  # PlayingGameScene
         else:
             grid.update()
 

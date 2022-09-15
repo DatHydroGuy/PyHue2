@@ -12,12 +12,12 @@ class HighScoreScene(Scene):
         super(HighScoreScene, self).__init__(game)
         self.grid_width = self.get_game().get_grid().get_grid_size()[0]
         self.grid_height = self.get_game().get_grid().get_grid_size()[1]
-        self.screen_width = GameConstants.SCREEN_SIZE[0]
-        self.screen_height = GameConstants.SCREEN_SIZE[1]
-        min_dimension = min(GameConstants.SCREEN_SIZE[0], GameConstants.SCREEN_SIZE[1])
-        self.title_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.12))
-        self.basic_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.06))
-        self.button_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.045))
+        self.screen_width = GameConstants.WINDOW_SIZE[0]
+        self.screen_height = GameConstants.WINDOW_SIZE[1]
+        min_dimension = min(GameConstants.WINDOW_SIZE[0], GameConstants.WINDOW_SIZE[1])
+        self.title_font = self.create_font(int(min_dimension * 0.12))
+        self.basic_font = self.create_font(int(min_dimension * 0.06))
+        self.button_font = self.create_font(int(min_dimension * 0.045))
         self.score_file = FileTools()
         self.__centred = False
         self.__moves = 99999999
@@ -41,7 +41,7 @@ class HighScoreScene(Scene):
         self.__pins = self.__level.get_pins()
         self.grid_width = self.get_game().get_grid().get_grid_size()[0]
         self.grid_height = self.get_game().get_grid().get_grid_size()[1]
-        self.centre_window_on_screen(GameConstants.SCREEN_SIZE)
+        self.centre_window_on_screen(GameConstants.WINDOW_SIZE)
 
     def draw_scores(self) -> None:
         self.draw_screen_centered_text('High Scores', self.title_font, pygame.Color('White'), self.screen_height * 0.05)
@@ -81,18 +81,18 @@ class HighScoreScene(Scene):
 
     def back_to_title(self) -> None:
         self.save_score()
-        self.get_game().change_scene(0)
+        self.get_game().change_scene(0)  # TitleScene
 
     def play_next(self) -> None:
         self.save_score()
         if str(self.__level) == '0':
-            self.get_game().change_scene(1)
+            self.get_game().change_scene(1)  # OptionsScene
         else:
             if self.__level.load_next_level():
                 self.get_game().shuffle_start = pygame.time.get_ticks()
-                self.get_game().change_scene(2)
+                self.get_game().change_scene(2)  # ShuffleScene
             else:
-                self.get_game().change_scene(7)
+                self.get_game().change_scene(7)  # LevelsCompleteScene
 
     def save_score(self) -> None:
         self.score_file.save_high_scores(self.__level, self.grid_width, self.grid_height,
@@ -101,7 +101,7 @@ class HighScoreScene(Scene):
     def update(self) -> None:
         super(HighScoreScene, self).update()
         if not self.__centred:
-            self.centre_window_on_screen(GameConstants.SCREEN_SIZE)
+            self.centre_window_on_screen(GameConstants.WINDOW_SIZE)
             saved_scores = self.score_file.get_high_scores(self.__level, self.grid_width,
                                                            self.grid_height, self.__pastel, self.__spread, self.__pins)
             self.__scores = saved_scores[str(self.__level)][str(self.grid_width)][str(

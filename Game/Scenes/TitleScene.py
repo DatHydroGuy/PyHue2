@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import os
 from random import uniform
 
@@ -20,14 +21,14 @@ class TitleScene(Scene):
         self.colour3 = pygame.Color(*[int(256 * x) for x in colour3])
         self.loop = True
         self.heart = '♥'  # Use Alt + Numeric pad 3 key
-        self.width = GameConstants.SCREEN_SIZE[0]
-        self.height = GameConstants.SCREEN_SIZE[1]
+        self.width = GameConstants.WINDOW_SIZE[0]
+        self.height = GameConstants.WINDOW_SIZE[1]
         self.zero_to_one1 = 0
         self.zero_to_one2 = 0
 
         min_dimension = min(self.width, self.height)
-        self.basic_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.06))
-        self.title_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.35))
+        self.basic_font = self.create_font(int(min_dimension * 0.06))
+        self.title_font = self.create_font(int(min_dimension * 0.35))
         self.heart_font = pygame.font.Font(os.path.join(GameConstants.ASSET_DIR, GameConstants.SYM_FONT_FILE),
                                            int(min_dimension * 0.43))
         self.text_surface = self.title_font.render('I    Hue', True, pygame.Color('White'))
@@ -43,7 +44,7 @@ class TitleScene(Scene):
         self.draw_screen_centered_text('Press Esc to exit.', font=self.basic_font,
                                        colour=self.colour3, y_position=int(self.height * 0.8))
 
-    def create_gradient_text(self, start_colour: pygame.Color, end_colour: pygame.Color, zero_to_one: float) ->\
+    def create_gradient_text(self, start_colour: pygame.Color, end_colour: pygame.Color, zero_to_one: float) -> \
             pygame.Surface:
         text_rect = self.merged_surface.get_rect()
         text_gradient_surf = self.merged_surface.copy()
@@ -80,10 +81,10 @@ class TitleScene(Scene):
                 exit()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                self.get_game().change_scene(1)
+                self.get_game().change_scene(1)  # OptionsScene
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_ESCAPE:
                     exit()
                 else:
-                    self.get_game().change_scene(1)
+                    self.get_game().change_scene(1)  # OptionsScene

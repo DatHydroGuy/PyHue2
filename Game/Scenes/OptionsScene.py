@@ -11,32 +11,37 @@ class OptionsScene(Scene):
     def __init__(self, game: Game.PyHue2) -> None:
         super(OptionsScene, self).__init__(game)
         self.sliders = []
-        self.slider_values = [5, 5, 0, 100, GameConstants.GRID_PINS_RANDOMISED]
+        self.slider_values = [GameConstants.DEFAULT_WIDTH, GameConstants.DEFAULT_HEIGHT, GameConstants.DEFAULT_PASTEL,
+                              GameConstants.DEFAULT_SPREAD, GameConstants.GRID_PINS_RANDOMISED]
         self.slider_draw = [0.3, 0.4, 0.5, 0.6, 0.75]
-        self.width = GameConstants.SCREEN_SIZE[0]
-        self.height = GameConstants.SCREEN_SIZE[1]
+        self.width = GameConstants.WINDOW_SIZE[0]
+        self.height = GameConstants.WINDOW_SIZE[1]
         self.zero_to_one = 0
         self.colour1 = None
         self.colour2 = None
 
         self.display_surface = pygame.display.get_surface()
         min_dimension = min(self.width, self.height)
-        self.basic_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.08))
-        self.button_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.045))
-        self.score_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.04))
-        self.title_font = pygame.font.Font('freesansbold.ttf', int(min_dimension * 0.18))
+        self.basic_font = self.create_font(int(min_dimension * 0.08))
+        self.button_font = self.create_font(int(min_dimension * 0.045))
+        self.score_font = self.create_font(int(min_dimension * 0.04))
+        self.title_font = self.create_font(int(min_dimension * 0.18))
 
         self.slider_min = int(self.width * 0.45)
         self.slider_max = int(self.width * 0.9)
         self.slider_size = min_dimension * 0.08
         self.slider1 = Slider(self.slider_size, self.slider_min, self.slider_max,
-                              self.height * self.slider_draw[0], 5, 63, 1, self.slider_values[0])
+                              self.height * self.slider_draw[0], GameConstants.MIN_GRID_COLUMNS,
+                              GameConstants.MAX_GRID_COLUMNS, 1, self.slider_values[0])
         self.slider2 = Slider(self.slider_size, self.slider_min, self.slider_max,
-                              self.height * self.slider_draw[1], 5, 37, 1, self.slider_values[1])
+                              self.height * self.slider_draw[1], GameConstants.MIN_GRID_ROWS,
+                              GameConstants.MAX_GRID_ROWS, 1, self.slider_values[1])
         self.slider3 = Slider(self.slider_size, self.slider_min, self.slider_max,
-                              self.height * self.slider_draw[2], 0, 100, 1, self.slider_values[2])
+                              self.height * self.slider_draw[2], GameConstants.MIN_PASTEL, GameConstants.MAX_PASTEL, 1,
+                              self.slider_values[2])
         self.slider4 = Slider(self.slider_size, self.slider_min, self.slider_max,
-                              self.height * self.slider_draw[3], 10, 100, 1, self.slider_values[3])
+                              self.height * self.slider_draw[3], GameConstants.MIN_SPREAD, GameConstants.MAX_SPREAD, 1,
+                              self.slider_values[3])
         self.slider5 = Slider(self.slider_size, int(self.slider_min * 1.5), self.slider_max,
                               self.height * self.slider_draw[4],
                               GameConstants.GRID_PINS_CORNERS, GameConstants.GRID_PINS_RANDOMISED,
@@ -53,7 +58,7 @@ class OptionsScene(Scene):
         self.colour2 = self.get_game().colour2
 
     def back_to_title(self) -> None:
-        self.get_game().change_scene(0)
+        self.get_game().change_scene(0)  # TitleScene
 
     def play_random(self) -> None:
         self.get_game().num_tiles_horizontally = self.slider1.value
@@ -62,12 +67,14 @@ class OptionsScene(Scene):
                                   self.slider3.value / 100, self.slider4.value / 100, self.slider5.value)
         self.get_game().load_level(0)
         self.get_game().shuffle_start = pygame.time.get_ticks()
-        self.get_game().change_scene(2)
+        self.get_game().change_scene(2)  # ShuffleScene
 
     def play_levels(self) -> None:
-        self.get_game().load_level(1)
-        self.get_game().shuffle_start = pygame.time.get_ticks()
-        self.get_game().change_scene(2)
+        # TODO: Take user to the level picker scene
+        self.get_game().change_scene(8)  # LevelPickerScene
+        # self.get_game().load_level(1)
+        # self.get_game().shuffle_start = pygame.time.get_ticks()
+        # self.get_game().change_scene(2)  # ShuffleScene
 
     def draw_buttons(self) -> None:
         text_surface = self.button_font.render('Play XXXXX', True, pygame.Color('Black'))

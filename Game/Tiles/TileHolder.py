@@ -9,7 +9,7 @@ from Game.Tiles import Tile
 
 class TileHolder(GameObject):
     def __init__(self, grid_position: tuple[int, int], draw_position: tuple[int, int], size: tuple[int, int],
-                 is_pinned: bool, game: Game.PyHue2) -> None:
+                 is_pinned: bool, game: Game.PyHue2, preview: bool = False) -> None:
         super(TileHolder, self).__init__(grid_position, draw_position, size)
         self.__game = game
         self.__tile = Tile(grid_position, draw_position, size, game)
@@ -67,7 +67,5 @@ class TileHolder(GameObject):
     def render(self) -> None:
         rect = self.get_tile().render()
         if self.__is_pinned:
-            pygame.draw.circle(self.__game.screen, pygame.Color('black'), rect.center,
-                               min(rect.width, rect.height) // 15, 0)
-            pygame.draw.circle(self.__game.screen, pygame.Color('white'), rect.center,
-                               min(rect.width, rect.height) // 30, 0)
+            pygame.draw.circle(self.__game.screen, pygame.Color('black'), rect.center, 3, 0)
+            pygame.draw.circle(self.__game.screen, pygame.Color('white'), rect.center, 1, 0)

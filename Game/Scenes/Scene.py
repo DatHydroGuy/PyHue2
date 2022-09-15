@@ -12,6 +12,7 @@ from Game.Shared import GameConstants
 class Scene:
     def __init__(self, game: Game.PyHue2) -> None:
         self.__game = game
+        self.__last_click = pygame.time.get_ticks()
 
     def handle_events(self, events: list[pygame.event.Event]):
         pass
@@ -27,6 +28,16 @@ class Scene:
 
     def setup(self) -> None:
         pass
+
+    def check_button_click(self) -> bool:
+        if pygame.time.get_ticks() - self.__last_click > GameConstants.MIN_TIME_BETWEEN_BUTTON_CLICKS:
+            self.__last_click = pygame.time.get_ticks()
+            return True
+        return False
+
+    @staticmethod
+    def create_font(size: int) -> pygame.font.Font:
+        return pygame.font.Font('freesansbold.ttf', size)
 
     @staticmethod
     def update_colours(divisor: float, start_time: int = 0) -> float:
@@ -66,7 +77,7 @@ class Scene:
     def draw_screen_centered_text(text: str, font: pygame.font.Font, colour: pygame.Color, y_position: int = 0) -> None:
         text_surface = font.render(text, True, colour)
         text_rectangle = text_surface.get_rect()
-        text_rectangle.midtop = (GameConstants.SCREEN_SIZE[0] / 2, y_position)
+        text_rectangle.midtop = (GameConstants.WINDOW_SIZE[0] / 2, y_position)
         pygame.display.get_surface().blit(text_surface, text_rectangle)
 
     @staticmethod

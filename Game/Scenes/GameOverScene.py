@@ -72,7 +72,7 @@ class GameOverScene(Scene):
             self.fade_heart_surface(self.surface, self.rect, 0, 0, curr_time - self.fade_out_end,
                                     GameConstants.SOLVED_PAUSE)
         else:
-            self.get_game().change_scene(5)
+            self.get_game().change_scene(5)  # HighScoreScene
             self.begin = False
 
     def handle_events(self, events: list[pygame.event.Event]) -> None:
