@@ -32,22 +32,12 @@ class LevelsCompleteScene(Scene):
                                        pygame.Color('White'), self.screen_height * 0.37)
 
     def draw_buttons(self) -> None:
-        text_surface = self.button_font.render('Create New Leve', True, pygame.Color('Black'))
-        text_rectangle = text_surface.get_rect()
-        text_rectangle = text_rectangle.inflate(text_rectangle.width * 0.25, text_rectangle.height * 0.25)
-        self.button('Play Random', self.button_font, pygame.Color('Black'),
-                    self.screen_width * 0.5 - text_rectangle.width // 2, self.screen_height * 0.6,
-                    text_rectangle.width, text_rectangle.height, pygame.Color('DarkGreen'),
-                    pygame.Color('Green'), self.play_next)
-        # TODO: make the following button point to the level editor when it's done
-        self.button('Create New Level', self.button_font, pygame.Color('Black'),
-                    self.screen_width * 0.5 - text_rectangle.width // 2, self.screen_height * 0.75,
-                    text_rectangle.width, text_rectangle.height, pygame.Color('DarkGreen'),
-                    pygame.Color('Green'), self.play_next)
-        self.button('Back To Title', self.button_font, pygame.Color('Black'),
-                    self.screen_width * 0.5 - text_rectangle.width // 2, self.screen_height * 0.9,
-                    text_rectangle.width, text_rectangle.height, pygame.Color('DarkRed'),
-                    pygame.Color('Red'), self.back_to_title)
+        # TODO: make the middle button point to the level editor when it's done
+        self.draw_button_group(self.button_font, ['Play Random', 'Create New Level', 'Back To Title'],
+                               [(0.5, 0.6), (0.5, 0.75), (0.5, 0.9)],
+                               [pygame.Color('DarkGreen'), pygame.Color('DarkGreen'), pygame.Color('DarkRed')],
+                               [pygame.Color('Green'), pygame.Color('Green'), pygame.Color('Red')],
+                               [self.play_next, self.play_next, self.back_to_title])
 
     def back_to_title(self) -> None:
         self.get_game().change_scene(0)  # TitleScene

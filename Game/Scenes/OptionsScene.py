@@ -77,21 +77,11 @@ class OptionsScene(Scene):
         # self.get_game().change_scene(2)  # ShuffleScene
 
     def draw_buttons(self) -> None:
-        text_surface = self.button_font.render('Play XXXXX', True, pygame.Color('Black'))
-        text_rectangle = text_surface.get_rect()
-        text_rectangle = text_rectangle.inflate(text_rectangle.width * 0.25, text_rectangle.height * 0.25)
-        self.button('Back', self.button_font, pygame.Color('Black'),
-                    self.width * 0.2 - text_rectangle.width // 2, self.height * 0.88,
-                    text_rectangle.width, text_rectangle.height, pygame.Color('DarkRed'),
-                    pygame.Color('Red'), self.back_to_title)
-        self.button('Play Levels', self.button_font, pygame.Color('Black'),
-                    self.width * 0.5 - text_rectangle.width // 2, self.height * 0.88,
-                    text_rectangle.width, text_rectangle.height, pygame.Color('DarkGreen'),
-                    pygame.Color('Green'), self.play_levels)
-        self.button('Play Random', self.button_font, pygame.Color('Black'),
-                    self.width * 0.8 - text_rectangle.width // 2, self.height * 0.88,
-                    text_rectangle.width, text_rectangle.height, pygame.Color('DarkGreen'),
-                    pygame.Color('Green'), self.play_random)
+        self.draw_button_group(self.button_font, ['Back', 'Play Levels', 'Play Random'],
+                               [(0.2, 0.88), (0.5, 0.88), (0.8, 0.88)],
+                               [pygame.Color('DarkRed'), pygame.Color('DarkGreen'), pygame.Color('DarkGreen')],
+                               [pygame.Color('Red'), pygame.Color('Green'), pygame.Color('Green')],
+                               [self.back_to_title, self.play_levels, self.play_random])
 
     def draw_sliders(self) -> None:
         pin_layouts = ["Corners", "Vert Edges", "Horiz Edges", "Border", "Alternating", "Diagonal", "Rnd Diagonal",

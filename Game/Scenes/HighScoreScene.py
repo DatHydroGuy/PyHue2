@@ -66,18 +66,10 @@ class HighScoreScene(Scene):
                                        pygame.Color('Grey'), self.screen_height * 0.78)
 
     def draw_buttons(self) -> None:
-        text_surface = self.button_font.render('Play XXXXXXXX', True, pygame.Color('Black'))
-        text_rectangle = text_surface.get_rect()
-        text_rectangle = text_rectangle.inflate(text_rectangle.width * 0.25, text_rectangle.height * 0.25)
         button_text = 'Play Random' if str(self.__level) == '0' else 'Next Level'
-        self.button(button_text, self.button_font, pygame.Color('Black'),
-                    self.screen_width * 0.25 - text_rectangle.width // 2, self.screen_height * 0.92,
-                    text_rectangle.width, text_rectangle.height, pygame.Color('DarkGreen'),
-                    pygame.Color('Green'), self.play_next)
-        self.button('Back To Title', self.button_font, pygame.Color('Black'),
-                    self.screen_width * 0.75 - text_rectangle.width // 2, self.screen_height * 0.92,
-                    text_rectangle.width, text_rectangle.height, pygame.Color('DarkRed'),
-                    pygame.Color('Red'), self.back_to_title)
+        self.draw_button_group(self.button_font, [button_text, 'Back To Title'], [(0.25, 0.92), (0.75, 0.92)],
+                               [pygame.Color('DarkGreen'), pygame.Color('DarkRed')],
+                               [pygame.Color('Green'), pygame.Color('Red')], [self.play_next, self.back_to_title])
 
     def back_to_title(self) -> None:
         self.save_score()

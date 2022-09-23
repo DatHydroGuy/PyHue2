@@ -52,6 +52,19 @@ class Scene:
         self.__game.pg_window.position = ((self.__game.screen_width - window_size[0]) // 2,
                                           (self.__game.screen_height - window_size[1]) // 2)
 
+    def draw_button_group(self, font: pygame.font.Font, text: list[str], coords: list[tuple[float, float]],
+                          colour: list[pygame.Color], hover_colour: list[pygame.Color],
+                          callback: list[Callable[[], None]]) -> None:
+        max_text = max(text, key=len)
+        text_surface = font.render(max_text, True, pygame.Color('Black'))
+        text_rectangle = text_surface.get_rect()
+        text_rectangle = text_rectangle.inflate(text_rectangle.width * 0.25, text_rectangle.height * 0.25)
+        for i, button_text in enumerate(text):
+            self.button(button_text, font, pygame.Color('Black'),
+                        GameConstants.WINDOW_SIZE[0] * coords[i][0] - text_rectangle.width // 2,
+                        GameConstants.WINDOW_SIZE[1] * coords[i][1], text_rectangle.width, text_rectangle.height,
+                        colour[i], hover_colour[i], callback[i])
+
     @staticmethod
     def button(button_text: str, font: pygame.font, colour: pygame.Color, top_left_x: int, top_left_y: int,
                width: int, height: int, inactive_colour: pygame.Color, active_colour: pygame.Color,

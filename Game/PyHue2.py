@@ -48,6 +48,7 @@ class PyHue2:
             PausedScene(self),
             LevelsCompleteScene(self),
             LevelPickerScene(self),
+            LevelEditScene(self),
         )
 
         self.__current_scene = 0
