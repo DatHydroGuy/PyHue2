@@ -271,11 +271,11 @@ class TransitionCreator:
 
     def choose_transition(self, width: int, height: int) -> list[list[tuple[int, int, int, int]]]:
         transition_type = choice(range(8))
-        reverse = choice(range(1)) == 1
-        mirror = choice(range(1)) == 1
+        reverse = choice(range(2)) == 1
+        mirror = choice(range(2)) == 1
         number_of_segments = choice([1, 2, 4])
-        double_spiral = choice(range(1)) == 1
-        print(f'{transition_type}|{reverse}|{mirror}|{number_of_segments}|{double_spiral}')
+        double_spiral = choice(range(2)) == 1
+        # print(f'{transition_type}|{reverse}|{mirror}|{number_of_segments}|{double_spiral}')
 
         if transition_type == 0:
             return self.diagonal_matrix(width, height, reverse=reverse, mirrored=mirror)

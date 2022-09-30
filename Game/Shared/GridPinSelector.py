@@ -24,7 +24,7 @@ class GridPinSelector:
     def generate_grid_pins(self, pins: int = GameConstants.GRID_PINS_RANDOMISED) -> None:
         grid_pin_type = randint(GameConstants.GRID_PINS_CORNERS, GameConstants.GRID_PINS_RANDOMISED - 1) if \
             pins == GameConstants.GRID_PINS_RANDOMISED else pins
-        print(f'{grid_pin_type}')
+        # print(f'{grid_pin_type}')
         self.pin_lookup[grid_pin_type]()
 
     def generate_corners_grid_pins(self) -> None:

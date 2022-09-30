@@ -72,9 +72,9 @@ class OptionsScene(Scene):
     def play_levels(self) -> None:
         # TODO: Take user to the level picker scene
         self.get_game().change_scene(8)  # LevelPickerScene
-        # self.get_game().load_level(1)
-        # self.get_game().shuffle_start = pygame.time.get_ticks()
-        # self.get_game().change_scene(2)  # ShuffleScene
+
+    def edit_level(self) -> None:
+        self.get_game().change_scene(9)  # LevelEditScene
 
     def draw_buttons(self) -> None:
         self.draw_button_group(self.button_font, ['Back', 'Play Levels', 'Play Random'],
@@ -82,6 +82,9 @@ class OptionsScene(Scene):
                                [pygame.Color('DarkRed'), pygame.Color('DarkGreen'), pygame.Color('DarkGreen')],
                                [pygame.Color('Red'), pygame.Color('Green'), pygame.Color('Green')],
                                [self.back_to_title, self.play_levels, self.play_random])
+        # Test Level Edit Scene
+        self.draw_button_group(self.button_font, ['E'], [(0.95, 0.88)], [pygame.Color('DarkGreen')],
+                               [pygame.Color('Green')], [self.edit_level])
 
     def draw_sliders(self) -> None:
         pin_layouts = ["Corners", "Vert Edges", "Horiz Edges", "Border", "Alternating", "Diagonal", "Rnd Diagonal",
@@ -106,11 +109,8 @@ class OptionsScene(Scene):
                                     self.width * 0.31, self.height * self.slider_draw[3])
         self.draw_left_aligned_text(self.basic_font, pin_layouts[self.slider5.value], pygame.Color('White'),
                                     self.width * 0.31, self.height * self.slider_draw[4])
-        self.slider1.draw(self.display_surface, pygame.Color('White'))
-        self.slider2.draw(self.display_surface, pygame.Color('White'))
-        self.slider3.draw(self.display_surface, pygame.Color('White'))
-        self.slider4.draw(self.display_surface, pygame.Color('White'))
-        self.slider5.draw(self.display_surface, pygame.Color('White'))
+        for slider in self.sliders:
+            slider.draw(self.display_surface, pygame.Color('White'))
 
     def update(self, start_time: int = 0) -> None:
         self.zero_to_one = self.update_colours(1500.0, start_time)

@@ -18,6 +18,14 @@ class Slider:
         self.x_position = x_min + int(value_ratio * x_diff)
         self.rect = pygame.rect.Rect(self.x_position, y_position - size // 2, size, size)
 
+    def set_value(self, new_value: int) -> None:
+        x_diff = self.x_max - self.x_min
+        value_ratio = (new_value - self.min_value) / float(self.max_value - self.min_value)
+        print(f'Old val:{self.value} | New val:{new_value} | Old x:{self.x_position} | New x:{self.x_min + int(value_ratio * x_diff)}')
+        self.x_position = self.x_min + int(value_ratio * x_diff)
+        self.rect.left = self.x_position
+        self.value = new_value
+
     def normalise_slider_value(self) -> int:
         pixel_range = self.x_max - self.x_min
         pixels_per_step = pixel_range / float((self.max_value - self.min_value) / self.step)

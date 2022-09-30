@@ -66,3 +66,9 @@ class Level:
             self.__game_grid = Grid(self.__game, width, height, self.__pastel, self.__spread, pins,
                                     corner_colours, not is_from_preview)
             return True
+
+    def edit_level(self, columns: int, rows: int, pins: int = GameConstants.GRID_PINS_RANDOMISED,
+                   corner_colours: list[list[int]] = None) -> None:
+        self.__game.set_size(columns, rows)
+        self.__game_grid = Grid(self.__game, columns, rows, self.__pastel, self.__spread, pins,
+                                corner_colours, True)
