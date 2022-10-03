@@ -56,6 +56,8 @@ class LevelEditScene(Scene):
         self.bottom_right_colour = [0, 255, 0]
         self.old_corner = -1
         self.display_surface = pygame.display.get_surface()
+        self.changed = False
+        self.saved = False
 
     def setup(self) -> None:
         super(LevelEditScene, self).setup()
@@ -66,6 +68,8 @@ class LevelEditScene(Scene):
         # grid.reset()
         # self.fake_screen = pygame.display.get_surface().copy()
         self.__max_level = self.__file.count_levels_in_file()
+        self.changed = False
+        self.saved = False
 
     def set_grid_for_preview(self):
         self.get_game().edit_level(self.slider1.value, self.slider2.value, self.slider6.value,
@@ -80,7 +84,7 @@ class LevelEditScene(Scene):
                                [(0.9, 0.80), (0.9, 0.86), (0.9, 0.92)],
                                [pygame.Color('DarkGreen')] * 2 + [pygame.Color('DarkRed')],
                                [pygame.Color('Green')] * 2 + [pygame.Color('Red')],
-                               [self.previous_level, self.play_level, self.options_screen])
+                               [self.try_level, self.save_level, self.options_screen])
 
     def draw_sliders(self) -> None:
         corners = ["Top Left", "Top Right", "Bottom Left", "Bottom Right"]
@@ -118,23 +122,21 @@ class LevelEditScene(Scene):
         for slider in self.sliders:
             slider.draw(self.display_surface, pygame.Color('White'))
 
-    def previous_level(self) -> None:
-        # if self.check_button_click() and self.__level_num > 1:
-        #     self.__level_num -= 1
-        #     self.set_grid_for_preview()
-        pass
+    def try_level(self) -> None:
+        corner_colours = [self.top_left_colour, self.top_right_colour, self.bottom_left_colour,
+                          self.bottom_right_colour]
+        self.get_game().try_level(self.slider1.value, self.slider2.value, self.slider6.value,
+                                  corner_colours)
+        self.get_game().shuffle_start = pygame.time.get_ticks()
+        self.get_game().change_scene(2)  # ShuffleScene
 
-    def play_level(self) -> None:
-        # self.get_game().get_level().load_level(self.__level_num, True)
-        # self.get_game().shuffle_start = pygame.time.get_ticks()
-        # self.get_game().change_scene(2)  # ShuffleScene
-        pass
-
-    def next_level(self) -> None:
-        # if self.check_button_click() and self.__level_num < self.__max_level:
-        #     self.__level_num += 1
-        #     self.set_grid_for_preview()
-        pass
+    def save_level(self) -> None:
+        if self.changed and not self.saved:
+            file_tools = FileTools()
+            corner_colours = [self.top_left_colour, self.top_right_colour, self.bottom_left_colour,
+                              self.bottom_right_colour]
+            file_tools.save_level(self.sliders, corner_colours)
+            self.saved = True
 
     def options_screen(self) -> None:
         self.get_game().change_scene(1)  # OptionsScene
@@ -143,7 +145,6 @@ class LevelEditScene(Scene):
         super(LevelEditScene, self).update()
 
         if self.slider7.value != self.old_corner:
-            print("New corner selected")
             if self.slider7.value == 0:
                 colour = self.top_left_colour
             elif self.slider7.value == 1:
@@ -157,7 +158,6 @@ class LevelEditScene(Scene):
             self.slider5.set_value(colour[2])
             self.old_corner = self.slider7.value
         else:
-            print("Same corner")
             colour = [self.slider3.value, self.slider4.value, self.slider5.value]
             if self.slider7.value == 0:
                 self.top_left_colour = colour
@@ -206,6 +206,8 @@ class LevelEditScene(Scene):
             elif event.type == pygame.MOUSEMOTION:
                 for i, draggable in enumerate(self.sliders):
                     if draggable.dragging:
+                        self.changed = True
+                        self.saved = False
                         mouse_x, mouse_y = event.pos
                         self.sliders[i].x_position = max(min(mouse_x + self.offset_x, draggable.x_max), draggable.x_min)
                         self.sliders[i].update()

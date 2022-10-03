@@ -99,6 +99,11 @@ class PyHue2:
             self.__level = Level(self, GameConstants.MIN_GRID_COLUMNS, GameConstants.MIN_GRID_ROWS)
             self.__level.load_level(level_num, False)
 
+    def try_level(self, columns: int, rows: int, pins: int = GameConstants.GRID_PINS_RANDOMISED,
+                  corner_colours: list[list[int]] = None) -> None:
+        self.__level = Level(self, GameConstants.MIN_GRID_COLUMNS, GameConstants.MIN_GRID_ROWS)
+        self.__level.edit_level(columns, rows, pins, corner_colours, False)
+
     def edit_level(self, columns: int, rows: int, pins: int = GameConstants.GRID_PINS_RANDOMISED,
                    corner_colours: list[list[int]] = None) -> None:
         self.__level = Level(self, GameConstants.MIN_GRID_COLUMNS, GameConstants.MIN_GRID_ROWS)

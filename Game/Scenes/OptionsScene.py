@@ -83,8 +83,8 @@ class OptionsScene(Scene):
                                [pygame.Color('Red'), pygame.Color('Green'), pygame.Color('Green')],
                                [self.back_to_title, self.play_levels, self.play_random])
         # Test Level Edit Scene
-        self.draw_button_group(self.button_font, ['E'], [(0.95, 0.88)], [pygame.Color('DarkGreen')],
-                               [pygame.Color('Green')], [self.edit_level])
+        # self.draw_button_group(self.button_font, ['E'], [(0.95, 0.88)], [pygame.Color('DarkGreen')],
+        #                        [pygame.Color('Green')], [self.edit_level])
 
     def draw_sliders(self) -> None:
         pin_layouts = ["Corners", "Vert Edges", "Horiz Edges", "Border", "Alternating", "Diagonal", "Rnd Diagonal",

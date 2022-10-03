@@ -3,6 +3,7 @@ import os
 from json import JSONDecodeError
 from pathlib import Path
 
+from . import Slider
 from .GameConstants import GameConstants
 
 
@@ -64,6 +65,15 @@ class FileTools:
             pins = -1
             corner_colours = [(-1,)]
         return width, height, pins, corner_colours
+
+    def save_level(self, sliders: list[Slider], corner_colours: list[list[int]]) -> None:
+        corner_tuple = [tuple(c) for c in corner_colours]
+        new_level = f'\n{sliders[0].value},{sliders[1].value},{sliders[6].value},{",".join(str(c) for c in corner_tuple)}'
+        try:
+            with open(self.levels_file, "a") as write_file:
+                write_file.writelines([new_level])
+        except FileNotFoundError:
+            pass
 
     def get_high_scores(self, level: int, width: int, height: int, pastel: int, spread: int, pins: int) -> dict:
         with open(self.score_file, "r") as read_file:
