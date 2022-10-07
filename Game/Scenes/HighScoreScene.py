@@ -26,6 +26,7 @@ class HighScoreScene(Scene):
         self.__pastel = None
         self.__spread = None
         self.__pins = None
+        self.__pins_spread = None
         self.__level = None
         self.__pin_text = ["Corners", "Vert Edges", "Horiz Edges", "Border", "Alternating", "Diagonal", "Rnd Diagonal",
                            "Knights Tour", "Random", "Rnd Choice"]
@@ -39,6 +40,7 @@ class HighScoreScene(Scene):
         self.__pastel = int(self.__level.get_pastel() * 100)
         self.__spread = int(self.__level.get_spread() * 100)
         self.__pins = self.__level.get_pins()
+        self.__pins_spread = self.__level.get_pin_spread()  # only has value if pins = RANDOM_DIAGONAL
         self.grid_width = self.get_game().get_grid().get_grid_size()[0]
         self.grid_height = self.get_game().get_grid().get_grid_size()[1]
         self.centre_window_on_screen(GameConstants.WINDOW_SIZE)
@@ -46,24 +48,27 @@ class HighScoreScene(Scene):
     def draw_scores(self) -> None:
         self.draw_screen_centered_text('High Scores', self.title_font, pygame.Color('White'), self.screen_height * 0.05)
         if str(self.__level) == '0':
+            spread_text = f', Spread:{self.__pins_spread}' if self.__pins == GameConstants.GRID_PINS_RANDOM_DIAGONAL\
+                else ''
             self.draw_screen_centered_text(f'Width:{self.grid_width}, Height:{self.grid_height}', self.basic_font,
                                            pygame.Color('Grey'), self.screen_height * 0.20)
-            self.draw_screen_centered_text(f'Pastel:{int(100 * self.__pastel)}%, Spread:{self.__spread}%,'
-                                           f' Pins:{self.__pin_text[self.__pins]}', self.basic_font,
-                                           pygame.Color('Grey'), self.screen_height * 0.28)
+            self.draw_screen_centered_text(f'Pastel:{int(100 * self.__pastel)}%, Spread:{self.__spread}%',
+                                           self.basic_font, pygame.Color('Grey'), self.screen_height * 0.28)
+            self.draw_screen_centered_text(f'Pins:{self.__pin_text[self.__pins]}{spread_text}', self.basic_font,
+                                           pygame.Color('Grey'), self.screen_height * 0.36)
         else:
             self.draw_screen_centered_text(f'Level:{self.__level}', self.basic_font,
                                            pygame.Color('White'), self.screen_height * 0.25)
         self.draw_screen_centered_text(f'Your moves: {self.__moves}', self.basic_font, pygame.Color('White'),
-                                       self.screen_height * 0.42)
+                                       self.screen_height * 0.46)
         self.draw_screen_centered_text(f'Your time: {self.__time} seconds', self.basic_font,
-                                       pygame.Color('White'), self.screen_height * 0.50)
+                                       pygame.Color('White'), self.screen_height * 0.54)
         self.draw_screen_centered_text(f'Previous attempts: {self.__scores[0]}', self.basic_font,
-                                       pygame.Color('Grey'), self.screen_height * 0.62)
+                                       pygame.Color('Grey'), self.screen_height * 0.64)
         self.draw_screen_centered_text(f'Average moves: {self.__scores[1]:.0f}', self.basic_font,
-                                       pygame.Color('Grey'), self.screen_height * 0.70)
+                                       pygame.Color('Grey'), self.screen_height * 0.72)
         self.draw_screen_centered_text(f'Average time: {self.__scores[2]:.3f} seconds', self.basic_font,
-                                       pygame.Color('Grey'), self.screen_height * 0.78)
+                                       pygame.Color('Grey'), self.screen_height * 0.8)
 
     def draw_buttons(self) -> None:
         button_text = 'Play Random' if str(self.__level) == '0' else 'Next Level'
@@ -87,17 +92,18 @@ class HighScoreScene(Scene):
                 self.get_game().change_scene(7)  # LevelsCompleteScene
 
     def save_score(self) -> None:
-        self.score_file.save_high_scores(self.__level, self.grid_width, self.grid_height,
-                                         self.__pastel, self.__spread, self.__pins, self.__moves, self.__time)
+        self.score_file.save_high_scores(self.__level, self.grid_width, self.grid_height, self.__pastel, self.__spread,
+                                         self.__pins, self.__pins_spread, self.__moves, self.__time)
 
     def update(self) -> None:
         super(HighScoreScene, self).update()
         if not self.__centred:
             self.centre_window_on_screen(GameConstants.WINDOW_SIZE)
-            saved_scores = self.score_file.get_high_scores(self.__level, self.grid_width,
-                                                           self.grid_height, self.__pastel, self.__spread, self.__pins)
+            saved_scores = self.score_file.get_high_scores(self.__level, self.grid_width, self.grid_height,
+                                                           self.__pastel, self.__spread, self.__pins,
+                                                           self.__pins_spread)
             self.__scores = saved_scores[str(self.__level)][str(self.grid_width)][str(
-                self.grid_height)][str(self.__pastel)][str(self.__spread)][str(self.__pins)]
+                self.grid_height)][str(self.__pastel)][str(self.__spread)][str(self.__pins)][str(self.__pins_spread)]
             self.__centred = True
 
     def render(self) -> None:

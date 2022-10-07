@@ -16,6 +16,7 @@ class Level:
         self.__spread = spread
         self.__pins = randint(GameConstants.GRID_PINS_CORNERS, GameConstants.GRID_PINS_RANDOMISED - 1) if \
             pins == GameConstants.GRID_PINS_RANDOMISED else pins
+        self.__pin_spread = randint(3, min(columns, rows))
         self.__game_grid = Grid(game, columns, rows, pastel, spread, self.__pins, corner_colours)
         self.__current_level = 0
 
@@ -33,6 +34,9 @@ class Level:
 
     def get_pins(self) -> int:
         return self.__pins
+
+    def get_pin_spread(self) -> int:
+        return self.__pin_spread
 
     def load_next_level(self) -> bool:
         self.__current_level += 1

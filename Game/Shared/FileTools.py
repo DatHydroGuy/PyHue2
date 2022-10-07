@@ -68,14 +68,16 @@ class FileTools:
 
     def save_level(self, sliders: list[Slider], corner_colours: list[list[int]]) -> None:
         corner_tuple = [tuple(c) for c in corner_colours]
-        new_level = f'\n{sliders[0].value},{sliders[1].value},{sliders[6].value},{",".join(str(c) for c in corner_tuple)}'
+        new_level =\
+            f'\n{sliders[0].value},{sliders[1].value},{sliders[6].value},{",".join(str(c) for c in corner_tuple)}'
         try:
             with open(self.levels_file, "a") as write_file:
                 write_file.writelines([new_level])
         except FileNotFoundError:
             pass
 
-    def get_high_scores(self, level: int, width: int, height: int, pastel: int, spread: int, pins: int) -> dict:
+    def get_high_scores(self, level: int, width: int, height: int, pastel: int, spread: int, pins: int,
+                        pin_spread: int) -> dict:
         with open(self.score_file, "r") as read_file:
             try:
                 scores_dict = json.load(read_file)
@@ -110,19 +112,25 @@ class FileTools:
         try:
             _ = scores_dict[str(level)][str(width)][str(height)][str(pastel)][str(spread)][str(pins)]
         except KeyError:
-            scores_dict[str(level)][str(width)][str(height)][str(pastel)][str(spread)][str(pins)] = [0, 0, 0]
+            scores_dict[str(level)][str(width)][str(height)][str(pastel)][str(spread)][str(pins)] = {}
+
+        try:
+            _ = scores_dict[str(level)][str(width)][str(height)][str(pastel)][str(spread)][str(pins)][str(pin_spread)]
+        except KeyError as e:
+            scores_dict[str(level)][str(width)][str(height)][str(pastel)][str(spread)][str(pins)][str(pin_spread)] =\
+                [0, 0, 0]
 
         return scores_dict
 
-    def save_high_scores(self, level: int, width: int, height: int, pastel: int, spread: int, pins: int, moves: int,
-                         seconds: float) -> None:
-        saved_dict = self.get_high_scores(level, width, height, pastel, spread, pins)
-        curr_stats = saved_dict[str(level)][str(width)][str(height)][str(pastel)][str(spread)][str(pins)]
+    def save_high_scores(self, level: int, width: int, height: int, pastel: int, spread: int, pins: int,
+                         pin_spread: int, moves: int, seconds: float) -> None:
+        saved_dict = self.get_high_scores(level, width, height, pastel, spread, pins, pin_spread)
+        curr_stats =\
+            saved_dict[str(level)][str(width)][str(height)][str(pastel)][str(spread)][str(pins)][str(pin_spread)]
         new_avg_moves = (curr_stats[1] * curr_stats[0] + moves) / (curr_stats[0] + 1)
         new_avg_time = (curr_stats[2] * curr_stats[0] + seconds) / (curr_stats[0] + 1)
-        saved_dict[str(level)][str(width)][str(height)][str(pastel)][str(spread)][str(pins)] = [curr_stats[0] + 1,
-                                                                                                new_avg_moves,
-                                                                                                new_avg_time]
+        saved_dict[str(level)][str(width)][str(height)][str(pastel)][str(spread)][str(pins)][str(pin_spread)] =\
+            [curr_stats[0] + 1, new_avg_moves, new_avg_time]
 
         with open(self.score_file, "w") as write_file:
             json.dump(saved_dict, write_file)

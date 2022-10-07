@@ -50,7 +50,9 @@ class LevelPickerScene(Scene):
             self.draw_button_group(self.button_font, ['< Prev', 'Play', 'Next >'],
                                    [(0.2, 0.72), (0.5, 0.72), (0.8, 0.72)], [pygame.Color('DarkGreen')] * 3,
                                    [pygame.Color('Green')] * 3, [self.previous_level, self.play_level, self.next_level])
-        self.draw_button_group(self.button_font, ['Back to Options screen'], [(0.5, 0.88)], [pygame.Color('DarkRed')],
+        self.draw_button_group(self.button_font, ['Create New Level'], [(0.5, 0.81)], [pygame.Color('DarkGreen')],
+                               [pygame.Color('Green')], [self.edit_level])
+        self.draw_button_group(self.button_font, ['Back to Options screen'], [(0.5, 0.9)], [pygame.Color('DarkRed')],
                                [pygame.Color('Red')], [self.options_screen])
 
     def previous_level(self) -> None:
@@ -67,6 +69,9 @@ class LevelPickerScene(Scene):
         if self.check_button_click() and self.__level_num < self.__max_level:
             self.__level_num += 1
             self.set_grid_for_preview()
+
+    def edit_level(self):
+        self.get_game().change_scene(9)  # LevelEditScene
 
     def options_screen(self) -> None:
         self.get_game().change_scene(1)  # OptionsScene
