@@ -192,6 +192,19 @@ class LevelEditScene(Scene):
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
+                    preview_cell_size = self.get_game().get_grid().scaled_tile_size
+                    clicked_tile_x = int(event.pos[0] / GameConstants.TILE_SIZE[0])
+                    clicked_tile_y = int(event.pos[1] / GameConstants.TILE_SIZE[1])
+                    # Find out which axis is filled, and which isn't
+                    # calculate either horiz or vert borders for the grid, remembering that it thinks it is being
+                    # drawn at 800 x 600 so for the test grid of 11 width and 21 height...
+                    # Filled axis is vertical, so borders are on the horizontal axis
+                    # Scaled tile size is 28, so width of 11 X 28 = 308 pixels
+                    # 800 width - 308 grid width = 492 empty pixels, or 246 each size
+                    # Scaled grid (800x600 scaled to 600x450) => multiply by 3/4 => 246 pixels becomes 184.5 pixels
+                    # Add offset of scaled image (100 horiz and 10 vert) to get upper left corner is
+                    # located at pixel x=285, y=10
+
                     for i, draggable in enumerate(self.sliders):
                         if draggable.rect.collidepoint(event.pos):
                             draggable.dragging = True
