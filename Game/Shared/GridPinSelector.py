@@ -18,11 +18,12 @@ class GridPinSelector:
             GameConstants.GRID_PINS_DIAGONAL: self.generate_diagonal_grid_pins,
             GameConstants.GRID_PINS_RANDOM_DIAGONAL: self.generate_random_diagonal_grid_pins,
             GameConstants.GRID_PINS_RANDOM: self.generate_random_grid_pins,
-            GameConstants.GRID_PINS_KNIGHTS_TOUR: self.generate_knights_tour_grid_pins
+            GameConstants.GRID_PINS_KNIGHTS_TOUR: self.generate_knights_tour_grid_pins,
+            GameConstants.GRID_PINS_CUSTOM: self.generate_custom_grid_pins
         }
 
     def generate_grid_pins(self, pins: int = GameConstants.GRID_PINS_RANDOMISED) -> None:
-        grid_pin_type = randint(GameConstants.GRID_PINS_CORNERS, GameConstants.GRID_PINS_RANDOMISED - 1) if \
+        grid_pin_type = randint(GameConstants.GRID_PINS_CORNERS, GameConstants.GRID_PINS_CUSTOM - 1) if \
             pins == GameConstants.GRID_PINS_RANDOMISED else pins
         # print(f'{grid_pin_type}')
         self.pin_lookup[grid_pin_type]()
@@ -83,3 +84,6 @@ class GridPinSelector:
             if (row, col) not in pins:
                 self.grid[row][col].set_pinned(True)
                 pins.append((row, col))
+
+    def generate_custom_grid_pins(self) -> None:
+        pass

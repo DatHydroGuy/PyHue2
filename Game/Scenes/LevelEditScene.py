@@ -38,7 +38,7 @@ class LevelEditScene(Scene):
                               self.height * self.slider_draw[4], 0, 255, 1, self.slider_values[4])
         self.slider6 = Slider(self.slider_size, int(self.slider_min * 1.5), int(self.width * 0.4),
                               self.height * self.slider_draw[5],
-                              GameConstants.GRID_PINS_CORNERS, GameConstants.GRID_PINS_RANDOMISED,
+                              GameConstants.GRID_PINS_CORNERS, GameConstants.GRID_PINS_CUSTOM,
                               1, self.slider_values[5])
         self.slider7 = Slider(self.slider_size, int(self.width * 0.7), self.slider_max,
                               self.height * self.slider_draw[6], 0, 3, 1, self.slider_values[6])
@@ -89,7 +89,7 @@ class LevelEditScene(Scene):
     def draw_sliders(self) -> None:
         corners = ["Top Left", "Top Right", "Bottom Left", "Bottom Right"]
         pin_layouts = ["Corners", "Vert Edges", "Horiz Edges", "Border", "Alternating", "Diagonal", "Rnd Diagonal",
-                       "Knights Tour", "Random", "Rnd Choice"]
+                       "Knights Tour", "Random", "Rnd Choice", "Custom"]
         align_x = self.width * 0.15
         self.draw_right_aligned_text(self.basic_font, 'Width: ', pygame.Color('White'),
                                      align_x, self.height * self.slider_draw[0])
@@ -135,11 +135,31 @@ class LevelEditScene(Scene):
             file_tools = FileTools()
             corner_colours = [self.top_left_colour, self.top_right_colour, self.bottom_left_colour,
                               self.bottom_right_colour]
-            file_tools.save_level(self.sliders, corner_colours)
+            file_tools.save_level(self.sliders, corner_colours, self.get_game().get_grid().get_cell_pins())
             self.saved = True
 
     def options_screen(self) -> None:
         self.get_game().change_scene(1)  # OptionsScene
+
+    def calculate_clicked_preview_cell(self, event_pos):
+        # Calculate which cell was clicked (the preview thinks it is drawn at WINDOW_SIZE, so scale values)
+        preview_cell_size = self.get_game().get_grid().scaled_tile_size
+        scaled_tile_x = GameConstants.WINDOW_SIZE[0] / GameConstants.TILE_SIZE[0]
+        scaled_tile_y = GameConstants.WINDOW_SIZE[1] / GameConstants.TILE_SIZE[1]
+        border_is_left_and_right = abs(preview_cell_size[0] * 0.75 - scaled_tile_x) > abs(
+            preview_cell_size[1] * 0.75 - scaled_tile_y)
+        if border_is_left_and_right:
+            y_offset = 0
+            x_offset = (GameConstants.WINDOW_SIZE[0] - (preview_cell_size[0] * self.slider1.value)) * 0.375
+        else:
+            x_offset = 0
+            y_offset = (GameConstants.WINDOW_SIZE[1] - (preview_cell_size[1] * self.slider2.value)) * 0.375
+        x_offset = int(x_offset) + GameConstants.PREVIEW_X_OFFSET
+        y_offset = int(y_offset) + GameConstants.PREVIEW_Y_OFFSET // 5
+        preview_cell_size = (int(preview_cell_size[0] * 0.75), int(preview_cell_size[1] * 0.75))
+        clicked_tile_x = (event_pos[0] - x_offset) // preview_cell_size[0]
+        clicked_tile_y = (event_pos[1] - y_offset) // preview_cell_size[1]
+        return clicked_tile_x, clicked_tile_y
 
     def update(self) -> None:
         super(LevelEditScene, self).update()
@@ -192,18 +212,16 @@ class LevelEditScene(Scene):
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    preview_cell_size = self.get_game().get_grid().scaled_tile_size
-                    clicked_tile_x = int(event.pos[0] / GameConstants.TILE_SIZE[0])
-                    clicked_tile_y = int(event.pos[1] / GameConstants.TILE_SIZE[1])
-                    # Find out which axis is filled, and which isn't
-                    # calculate either horiz or vert borders for the grid, remembering that it thinks it is being
-                    # drawn at 800 x 600 so for the test grid of 11 width and 21 height...
-                    # Filled axis is vertical, so borders are on the horizontal axis
-                    # Scaled tile size is 28, so width of 11 X 28 = 308 pixels
-                    # 800 width - 308 grid width = 492 empty pixels, or 246 each size
-                    # Scaled grid (800x600 scaled to 600x450) => multiply by 3/4 => 246 pixels becomes 184.5 pixels
-                    # Add offset of scaled image (100 horiz and 10 vert) to get upper left corner is
-                    # located at pixel x=285, y=10
+                    clicked_tile_x, clicked_tile_y = self.calculate_clicked_preview_cell(event.pos)
+                    # If click is outside the grid, ignore. Otherwise toggle pin and set pins to CUSTOM
+                    if 0 <= clicked_tile_x < self.slider1.value and 0 <= clicked_tile_y < self.slider2.value:
+                        self.get_game().get_grid().toggle_cell_pin(clicked_tile_x, clicked_tile_y)
+                        if self.slider6.value != GameConstants.GRID_PINS_CUSTOM:
+                            # TODO Save list of pinned cells here
+                            self.slider6.set_value(GameConstants.GRID_PINS_CUSTOM)
+                        else:
+                            # TODO Save list of pinned cells here
+                            pass
 
                     for i, draggable in enumerate(self.sliders):
                         if draggable.rect.collidepoint(event.pos):

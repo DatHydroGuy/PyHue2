@@ -44,7 +44,7 @@ class OptionsScene(Scene):
                               self.slider_values[3])
         self.slider5 = Slider(self.slider_size, int(self.slider_min * 1.5), self.slider_max,
                               self.height * self.slider_draw[4],
-                              GameConstants.GRID_PINS_CORNERS, GameConstants.GRID_PINS_RANDOMISED,
+                              GameConstants.GRID_PINS_CORNERS, GameConstants.GRID_PINS_CUSTOM,
                               1, self.slider_values[4])
         self.sliders.append(self.slider1)
         self.sliders.append(self.slider2)
@@ -88,7 +88,7 @@ class OptionsScene(Scene):
 
     def draw_sliders(self) -> None:
         pin_layouts = ["Corners", "Vert Edges", "Horiz Edges", "Border", "Alternating", "Diagonal", "Rnd Diagonal",
-                       "Knights Tour", "Random", "Rnd Choice"]
+                       "Knights Tour", "Random", "Rnd Choice", "Custom"]
         self.draw_right_aligned_text(self.basic_font, 'Width: ', pygame.Color('White'),
                                      self.width * 0.31, self.height * self.slider_draw[0])
         self.draw_right_aligned_text(self.basic_font, 'Height: ', pygame.Color('White'),

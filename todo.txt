@@ -19,8 +19,12 @@ DONE create a level picker which shows previews of pre-defined levels
 DONE on highscore screen, "play random" button should load another random level with current settings
 DONE when levels01.dat is completed, show user a "You have completed..." screen with an option to quit or load a random level
 DONE random diagonal scoring should be separated by the distance between the diagonals: a gap of 10 is harder than a gap of 3
+DONE create a level designer
+DONE add custom pin option to sliders
 
-create a level designer? (complete with custom pin designer?)
+update level data file to include custom pin layouts
+add custom pin designer to level editor
+update level data file to include level completed indicator
 update level picker so that only completed levels (plus the next one) are available to play
 push as many class variables into __dunder variables as possible
 have a level checker which prevents any impossible puzzles (i.e. checks that all cells have a unique colour)

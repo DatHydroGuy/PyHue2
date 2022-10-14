@@ -50,6 +50,21 @@ class Grid:
     def get_grid_size(self) -> tuple[int, int]:
         return self.__columns, self.__rows
 
+    def toggle_cell_pin(self, cell_x: int, cell_y: int) -> None:
+        self.__game_grid[cell_y][cell_x].toggle_pinned()
+
+    def set_cell_pins(self, pin_locations: list[tuple[int, int]]) -> None:
+        for pin_location in pin_locations:
+            self.__game_grid[pin_location[1]][pin_location[0]].set_pinned()
+
+    def get_cell_pins(self) -> list[tuple[int, int]]:
+        pin_locations = []
+        for r_index, row in enumerate(self.__game_grid):
+            for c_index, col in enumerate(row):
+                if self.__game_grid[r_index][c_index].get_pinned():
+                    pin_locations.append((c_index, r_index))
+        return pin_locations
+
     def get_solved_time(self) -> int:
         return self.__solved_time
 

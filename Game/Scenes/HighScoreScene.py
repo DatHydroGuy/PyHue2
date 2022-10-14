@@ -29,7 +29,7 @@ class HighScoreScene(Scene):
         self.__pins_spread = None
         self.__level = None
         self.__pin_text = ["Corners", "Vert Edges", "Horiz Edges", "Border", "Alternating", "Diagonal", "Rnd Diagonal",
-                           "Knights Tour", "Random", "Rnd Choice"]
+                           "Knights Tour", "Random", "Rnd Choice", "Custom"]
 
     def setup(self) -> None:
         super(HighScoreScene, self).setup()
@@ -48,7 +48,7 @@ class HighScoreScene(Scene):
     def draw_scores(self) -> None:
         self.draw_screen_centered_text('High Scores', self.title_font, pygame.Color('White'), self.screen_height * 0.05)
         if str(self.__level) == '0':
-            spread_text = f', Spread:{self.__pins_spread}' if self.__pins == GameConstants.GRID_PINS_RANDOM_DIAGONAL\
+            spread_text = f', Spread:{self.__pins_spread}' if self.__pins == GameConstants.GRID_PINS_RANDOM_DIAGONAL \
                 else ''
             self.draw_screen_centered_text(f'Width:{self.grid_width}, Height:{self.grid_height}', self.basic_font,
                                            pygame.Color('Grey'), self.screen_height * 0.20)
