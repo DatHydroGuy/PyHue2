@@ -19,6 +19,7 @@ class PyHue2:
 
         columns = 5
         rows = 5
+        self.custom_pins = []
         self.__level = Level(self, columns, rows)
         self.num_tiles_horizontally = columns
         self.num_tiles_vertically = rows
@@ -27,6 +28,7 @@ class PyHue2:
         self.colour2 = None
         self.__paused_time = 0
         self.__pause_start = 0
+        self.__try_level = False
 
         pygame.init()
         pygame.mixer.init()
@@ -48,6 +50,7 @@ class PyHue2:
             PausedScene(self),
             LevelsCompleteScene(self),
             LevelPickerScene(self),
+            LevelEditScene(self),
         )
 
         self.__current_scene = 0
@@ -97,6 +100,16 @@ class PyHue2:
             # play level from file
             self.__level = Level(self, GameConstants.MIN_GRID_COLUMNS, GameConstants.MIN_GRID_ROWS)
             self.__level.load_level(level_num, False)
+
+    def try_level(self, columns: int, rows: int, pins: int = GameConstants.GRID_PINS_RANDOMISED,
+                  corner_colours: list[list[int]] = None) -> None:
+        self.__level = Level(self, GameConstants.MIN_GRID_COLUMNS, GameConstants.MIN_GRID_ROWS)
+        self.__level.edit_level(columns, rows, pins, corner_colours, False, True)
+
+    def edit_level(self, columns: int, rows: int, pins: int = GameConstants.GRID_PINS_RANDOMISED,
+                   corner_colours: list[list[int]] = None) -> None:
+        self.__level = Level(self, GameConstants.MIN_GRID_COLUMNS, GameConstants.MIN_GRID_ROWS, pins=pins)
+        self.__level.edit_level(columns, rows, pins, corner_colours)
 
     def get_moves(self) -> int:
         return self.__moves

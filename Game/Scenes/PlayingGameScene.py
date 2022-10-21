@@ -22,10 +22,13 @@ class PlayingGameScene(Scene):
                 # Reshuffle
                 self.get_game().change_scene(2)  # ShuffleScene
             else:
-                self.get_game().set_moves(grid.get_number_of_moves())
-                self.get_game().set_time(grid.get_solved_time() - self.get_game().get_paused_time())
-                self.get_game().reset_paused_time()
-                self.get_game().change_scene(4)  # GameOverScene
+                if grid.is_in_try_mode():
+                    self.get_game().change_scene(9)  # LevelEditScene
+                else:
+                    self.get_game().set_moves(grid.get_number_of_moves())
+                    self.get_game().set_time(grid.get_solved_time() - self.get_game().get_paused_time())
+                    self.get_game().reset_paused_time()
+                    self.get_game().change_scene(4)  # GameOverScene
 
     def render(self) -> None:
         super(PlayingGameScene, self).render()
@@ -49,7 +52,10 @@ class PlayingGameScene(Scene):
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_ESCAPE:
-                    exit()
+                    if self.get_game().get_grid().is_in_try_mode():
+                        self.get_game().change_scene(9)  # LevelEditScene
+                    else:
+                        exit()
 
             # If window loses focus, store the paused time so that we can subtract it from the game time at the end.
             if event.type == pygame.ACTIVEEVENT:

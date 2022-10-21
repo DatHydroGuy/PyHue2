@@ -22,6 +22,9 @@ class TileHolder(GameObject):
     def get_pinned(self) -> bool:
         return self.__is_pinned
 
+    def toggle_pinned(self) -> None:
+        self.__is_pinned = not self.__is_pinned
+
     def get_tile(self) -> Tile:
         return self.__tile
 

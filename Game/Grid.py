@@ -9,7 +9,7 @@ from Game.Tiles import *
 class Grid:
     def __init__(self, game: Game.PyHue2, columns: int, rows: int, pastel: float = 0.5, spread: float = 1.0,
                  pins: int = GameConstants.GRID_PINS_RANDOMISED, corner_colours: list[pygame.Color] = None,
-                 preview: bool = False) -> None:
+                 preview: bool = False, try_level: bool = False) -> None:
         self.__game = game
         self.__columns = columns
         self.__rows = rows
@@ -22,6 +22,7 @@ class Grid:
         self.__solved = False
         self.__shuffled = False
         self.__preview = preview
+        self.__try = try_level
         pixels_per_tile = int(min(GameConstants.WINDOW_SIZE[0] / columns, GameConstants.WINDOW_SIZE[1] / rows, 30))
         self.scaled_tile_size = (pixels_per_tile, pixels_per_tile)
         self.__preview_x_offset = (GameConstants.WINDOW_SIZE[0] - self.scaled_tile_size[
@@ -40,7 +41,7 @@ class Grid:
         self.fade_in_end = self.fade_in_start + GameConstants.FADE_IN_DURATION
         self.__game_grid = [
             [TileHolder((x, y), (self.__preview_x_offset + x * self.__tile_size[0], y * self.__tile_size[1]),
-                        self.__tile_size, False, self.__game, preview)
+                        self.__tile_size, (x, y) in self.__game.custom_pins, self.__game, preview)
              for x in range(columns)] for y in range(rows)]
         self.generate_corner_colours(corner_colours, pastel, spread)
         gps = GridPinSelector(self.__game_grid)
@@ -50,11 +51,29 @@ class Grid:
     def get_grid_size(self) -> tuple[int, int]:
         return self.__columns, self.__rows
 
+    def toggle_cell_pin(self, cell_x: int, cell_y: int) -> None:
+        self.__game_grid[cell_y][cell_x].toggle_pinned()
+
+    def set_cell_pins(self, pin_locations: list[tuple[int, int]]) -> None:
+        for pin_location in pin_locations:
+            self.__game_grid[pin_location[1]][pin_location[0]].set_pinned(True)
+
+    def get_cell_pins(self) -> list[tuple[int, int]]:
+        pin_locations = []
+        for r_index, row in enumerate(self.__game_grid):
+            for c_index, col in enumerate(row):
+                if self.__game_grid[r_index][c_index].get_pinned():
+                    pin_locations.append((c_index, r_index))
+        return pin_locations
+
     def get_solved_time(self) -> int:
         return self.__solved_time
 
     def is_solved(self) -> bool:
         return self.__solved
+
+    def is_in_try_mode(self) -> bool:
+        return self.__try
 
     def is_shuffled(self) -> bool:
         return self.__shuffled

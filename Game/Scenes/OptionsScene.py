@@ -44,7 +44,7 @@ class OptionsScene(Scene):
                               self.slider_values[3])
         self.slider5 = Slider(self.slider_size, int(self.slider_min * 1.5), self.slider_max,
                               self.height * self.slider_draw[4],
-                              GameConstants.GRID_PINS_CORNERS, GameConstants.GRID_PINS_RANDOMISED,
+                              GameConstants.GRID_PINS_CORNERS, GameConstants.GRID_PINS_CUSTOM,
                               1, self.slider_values[4])
         self.sliders.append(self.slider1)
         self.sliders.append(self.slider2)
@@ -72,30 +72,23 @@ class OptionsScene(Scene):
     def play_levels(self) -> None:
         # TODO: Take user to the level picker scene
         self.get_game().change_scene(8)  # LevelPickerScene
-        # self.get_game().load_level(1)
-        # self.get_game().shuffle_start = pygame.time.get_ticks()
-        # self.get_game().change_scene(2)  # ShuffleScene
+
+    def edit_level(self) -> None:
+        self.get_game().change_scene(9)  # LevelEditScene
 
     def draw_buttons(self) -> None:
-        text_surface = self.button_font.render('Play XXXXX', True, pygame.Color('Black'))
-        text_rectangle = text_surface.get_rect()
-        text_rectangle = text_rectangle.inflate(text_rectangle.width * 0.25, text_rectangle.height * 0.25)
-        self.button('Back', self.button_font, pygame.Color('Black'),
-                    self.width * 0.2 - text_rectangle.width // 2, self.height * 0.88,
-                    text_rectangle.width, text_rectangle.height, pygame.Color('DarkRed'),
-                    pygame.Color('Red'), self.back_to_title)
-        self.button('Play Levels', self.button_font, pygame.Color('Black'),
-                    self.width * 0.5 - text_rectangle.width // 2, self.height * 0.88,
-                    text_rectangle.width, text_rectangle.height, pygame.Color('DarkGreen'),
-                    pygame.Color('Green'), self.play_levels)
-        self.button('Play Random', self.button_font, pygame.Color('Black'),
-                    self.width * 0.8 - text_rectangle.width // 2, self.height * 0.88,
-                    text_rectangle.width, text_rectangle.height, pygame.Color('DarkGreen'),
-                    pygame.Color('Green'), self.play_random)
+        self.draw_button_group(self.button_font, ['Back', 'Play Levels', 'Play Random'],
+                               [(0.2, 0.88), (0.5, 0.88), (0.8, 0.88)],
+                               [pygame.Color('DarkRed'), pygame.Color('DarkGreen'), pygame.Color('DarkGreen')],
+                               [pygame.Color('Red'), pygame.Color('Green'), pygame.Color('Green')],
+                               [self.back_to_title, self.play_levels, self.play_random])
+        # Test Level Edit Scene
+        # self.draw_button_group(self.button_font, ['E'], [(0.95, 0.88)], [pygame.Color('DarkGreen')],
+        #                        [pygame.Color('Green')], [self.edit_level])
 
     def draw_sliders(self) -> None:
         pin_layouts = ["Corners", "Vert Edges", "Horiz Edges", "Border", "Alternating", "Diagonal", "Rnd Diagonal",
-                       "Knights Tour", "Random", "Rnd Choice"]
+                       "Knights Tour", "Random", "Rnd Choice", "Custom"]
         self.draw_right_aligned_text(self.basic_font, 'Width: ', pygame.Color('White'),
                                      self.width * 0.31, self.height * self.slider_draw[0])
         self.draw_right_aligned_text(self.basic_font, 'Height: ', pygame.Color('White'),
@@ -116,11 +109,8 @@ class OptionsScene(Scene):
                                     self.width * 0.31, self.height * self.slider_draw[3])
         self.draw_left_aligned_text(self.basic_font, pin_layouts[self.slider5.value], pygame.Color('White'),
                                     self.width * 0.31, self.height * self.slider_draw[4])
-        self.slider1.draw(self.display_surface, pygame.Color('White'))
-        self.slider2.draw(self.display_surface, pygame.Color('White'))
-        self.slider3.draw(self.display_surface, pygame.Color('White'))
-        self.slider4.draw(self.display_surface, pygame.Color('White'))
-        self.slider5.draw(self.display_surface, pygame.Color('White'))
+        for slider in self.sliders:
+            slider.draw(self.display_surface, pygame.Color('White'))
 
     def update(self, start_time: int = 0) -> None:
         self.zero_to_one = self.update_colours(1500.0, start_time)
