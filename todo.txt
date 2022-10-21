@@ -21,9 +21,10 @@ DONE when levels01.dat is completed, show user a "You have completed..." screen 
 DONE random diagonal scoring should be separated by the distance between the diagonals: a gap of 10 is harder than a gap of 3
 DONE create a level designer
 DONE add custom pin option to sliders
+DONE add custom pin designer to level editor
 
+update level editor so that "Try" allows you to come back to your edit and change/save it as needed
 update level data file to include custom pin layouts
-add custom pin designer to level editor
 update level data file to include level completed indicator
 update level picker so that only completed levels (plus the next one) are available to play
 push as many class variables into __dunder variables as possible
