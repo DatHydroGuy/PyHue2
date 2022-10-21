@@ -28,6 +28,7 @@ class PyHue2:
         self.colour2 = None
         self.__paused_time = 0
         self.__pause_start = 0
+        self.__try_level = False
 
         pygame.init()
         pygame.mixer.init()
@@ -103,12 +104,12 @@ class PyHue2:
     def try_level(self, columns: int, rows: int, pins: int = GameConstants.GRID_PINS_RANDOMISED,
                   corner_colours: list[list[int]] = None) -> None:
         self.__level = Level(self, GameConstants.MIN_GRID_COLUMNS, GameConstants.MIN_GRID_ROWS)
-        self.__level.edit_level(columns, rows, pins, corner_colours, self.custom_pins, False)
+        self.__level.edit_level(columns, rows, pins, corner_colours, False, True)
 
     def edit_level(self, columns: int, rows: int, pins: int = GameConstants.GRID_PINS_RANDOMISED,
                    corner_colours: list[list[int]] = None) -> None:
         self.__level = Level(self, GameConstants.MIN_GRID_COLUMNS, GameConstants.MIN_GRID_ROWS, pins=pins)
-        self.__level.edit_level(columns, rows, pins, corner_colours, self.custom_pins)
+        self.__level.edit_level(columns, rows, pins, corner_colours)
 
     def get_moves(self) -> int:
         return self.__moves

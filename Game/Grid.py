@@ -9,7 +9,7 @@ from Game.Tiles import *
 class Grid:
     def __init__(self, game: Game.PyHue2, columns: int, rows: int, pastel: float = 0.5, spread: float = 1.0,
                  pins: int = GameConstants.GRID_PINS_RANDOMISED, corner_colours: list[pygame.Color] = None,
-                 preview: bool = False) -> None:
+                 preview: bool = False, try_level: bool = False) -> None:
         self.__game = game
         self.__columns = columns
         self.__rows = rows
@@ -22,6 +22,7 @@ class Grid:
         self.__solved = False
         self.__shuffled = False
         self.__preview = preview
+        self.__try = try_level
         pixels_per_tile = int(min(GameConstants.WINDOW_SIZE[0] / columns, GameConstants.WINDOW_SIZE[1] / rows, 30))
         self.scaled_tile_size = (pixels_per_tile, pixels_per_tile)
         self.__preview_x_offset = (GameConstants.WINDOW_SIZE[0] - self.scaled_tile_size[
@@ -70,6 +71,9 @@ class Grid:
 
     def is_solved(self) -> bool:
         return self.__solved
+
+    def is_in_try_mode(self) -> bool:
+        return self.__try
 
     def is_shuffled(self) -> bool:
         return self.__shuffled

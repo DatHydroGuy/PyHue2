@@ -63,7 +63,6 @@ class LevelEditScene(Scene):
     def setup(self) -> None:
         super(LevelEditScene, self).setup()
         self.centre_window_on_screen(GameConstants.WINDOW_SIZE)
-        self.get_game().custom_pins.clear()
         self.set_grid_for_preview()
         self.__max_level = self.__file.count_levels_in_file()
         self.changed = False

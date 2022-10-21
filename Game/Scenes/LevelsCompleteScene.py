@@ -32,18 +32,20 @@ class LevelsCompleteScene(Scene):
                                        pygame.Color('White'), self.screen_height * 0.37)
 
     def draw_buttons(self) -> None:
-        # TODO: make the middle button point to the level editor when it's done
         self.draw_button_group(self.button_font, ['Play Random', 'Create New Level', 'Back To Title'],
                                [(0.5, 0.6), (0.5, 0.75), (0.5, 0.9)],
                                [pygame.Color('DarkGreen'), pygame.Color('DarkGreen'), pygame.Color('DarkRed')],
                                [pygame.Color('Green'), pygame.Color('Green'), pygame.Color('Red')],
-                               [self.play_next, self.play_next, self.back_to_title])
+                               [self.play_next, self.create_new, self.back_to_title])
 
     def back_to_title(self) -> None:
         self.get_game().change_scene(0)  # TitleScene
 
     def play_next(self) -> None:
         self.get_game().change_scene(1)  # OptionsScene
+
+    def create_new(self) -> None:
+        self.get_game().change_scene(9)  # LevelEditScene
 
     def update(self) -> None:
         super(LevelsCompleteScene, self).update()
