@@ -19,6 +19,7 @@ class PyHue2:
 
         columns = 5
         rows = 5
+        self.custom_pins = []
         self.__level = Level(self, columns, rows)
         self.num_tiles_horizontally = columns
         self.num_tiles_vertically = rows
@@ -102,12 +103,12 @@ class PyHue2:
     def try_level(self, columns: int, rows: int, pins: int = GameConstants.GRID_PINS_RANDOMISED,
                   corner_colours: list[list[int]] = None) -> None:
         self.__level = Level(self, GameConstants.MIN_GRID_COLUMNS, GameConstants.MIN_GRID_ROWS)
-        self.__level.edit_level(columns, rows, pins, corner_colours, False)
+        self.__level.edit_level(columns, rows, pins, corner_colours, self.custom_pins, False)
 
     def edit_level(self, columns: int, rows: int, pins: int = GameConstants.GRID_PINS_RANDOMISED,
                    corner_colours: list[list[int]] = None) -> None:
-        self.__level = Level(self, GameConstants.MIN_GRID_COLUMNS, GameConstants.MIN_GRID_ROWS)
-        self.__level.edit_level(columns, rows, pins, corner_colours)
+        self.__level = Level(self, GameConstants.MIN_GRID_COLUMNS, GameConstants.MIN_GRID_ROWS, pins=pins)
+        self.__level.edit_level(columns, rows, pins, corner_colours, self.custom_pins)
 
     def get_moves(self) -> int:
         return self.__moves

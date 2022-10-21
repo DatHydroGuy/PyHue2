@@ -40,7 +40,7 @@ class Grid:
         self.fade_in_end = self.fade_in_start + GameConstants.FADE_IN_DURATION
         self.__game_grid = [
             [TileHolder((x, y), (self.__preview_x_offset + x * self.__tile_size[0], y * self.__tile_size[1]),
-                        self.__tile_size, False, self.__game, preview)
+                        self.__tile_size, (x, y) in self.__game.custom_pins, self.__game, preview)
              for x in range(columns)] for y in range(rows)]
         self.generate_corner_colours(corner_colours, pastel, spread)
         gps = GridPinSelector(self.__game_grid)
@@ -55,7 +55,7 @@ class Grid:
 
     def set_cell_pins(self, pin_locations: list[tuple[int, int]]) -> None:
         for pin_location in pin_locations:
-            self.__game_grid[pin_location[1]][pin_location[0]].set_pinned()
+            self.__game_grid[pin_location[1]][pin_location[0]].set_pinned(True)
 
     def get_cell_pins(self) -> list[tuple[int, int]]:
         pin_locations = []

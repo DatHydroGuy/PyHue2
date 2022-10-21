@@ -19,6 +19,7 @@ class GridPinSelector:
             GameConstants.GRID_PINS_RANDOM_DIAGONAL: self.generate_random_diagonal_grid_pins,
             GameConstants.GRID_PINS_RANDOM: self.generate_random_grid_pins,
             GameConstants.GRID_PINS_KNIGHTS_TOUR: self.generate_knights_tour_grid_pins,
+            GameConstants.GRID_PINS_RANDOMISED: self.generate_grid_pins,
             GameConstants.GRID_PINS_CUSTOM: self.generate_custom_grid_pins
         }
 

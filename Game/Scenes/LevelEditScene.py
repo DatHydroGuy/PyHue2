@@ -10,8 +10,9 @@ from Game.Shared import GameConstants, FileTools, Slider
 class LevelEditScene(Scene):
     # surface scaling source:
     # https://stackoverflow.com/questions/34910086/pygame-how-do-i-resize-a-surface-and-keep-all-objects-within-proportionate-to-t
-    def __init__(self, game: Game.PyHue2, level_num: int = 1) -> None:
+    def __init__(self, game: Game.PyHue2) -> None:
         super(LevelEditScene, self).__init__(game)
+        self.get_game().custom_pins.clear()
         self.fake_screen = pygame.display.get_surface().copy()
         self.width = GameConstants.WINDOW_SIZE[0]
         self.height = GameConstants.WINDOW_SIZE[1]
@@ -62,11 +63,8 @@ class LevelEditScene(Scene):
     def setup(self) -> None:
         super(LevelEditScene, self).setup()
         self.centre_window_on_screen(GameConstants.WINDOW_SIZE)
+        self.get_game().custom_pins.clear()
         self.set_grid_for_preview()
-        # self.get_game().load_level(1)
-        # grid = self.get_game().get_grid()
-        # grid.reset()
-        # self.fake_screen = pygame.display.get_surface().copy()
         self.__max_level = self.__file.count_levels_in_file()
         self.changed = False
         self.saved = False
@@ -125,8 +123,7 @@ class LevelEditScene(Scene):
     def try_level(self) -> None:
         corner_colours = [self.top_left_colour, self.top_right_colour, self.bottom_left_colour,
                           self.bottom_right_colour]
-        self.get_game().try_level(self.slider1.value, self.slider2.value, self.slider6.value,
-                                  corner_colours)
+        self.get_game().try_level(self.slider1.value, self.slider2.value, self.slider6.value, corner_colours)
         self.get_game().shuffle_start = pygame.time.get_ticks()
         self.get_game().change_scene(2)  # ShuffleScene
 
@@ -213,15 +210,17 @@ class LevelEditScene(Scene):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     clicked_tile_x, clicked_tile_y = self.calculate_clicked_preview_cell(event.pos)
-                    # If click is outside the grid, ignore. Otherwise toggle pin and set pins to CUSTOM
+                    # If click is outside the grid, ignore. Otherwise, toggle pin and set pins to CUSTOM
                     if 0 <= clicked_tile_x < self.slider1.value and 0 <= clicked_tile_y < self.slider2.value:
-                        self.get_game().get_grid().toggle_cell_pin(clicked_tile_x, clicked_tile_y)
                         if self.slider6.value != GameConstants.GRID_PINS_CUSTOM:
-                            # TODO Save list of pinned cells here
+                            self.get_game().custom_pins.clear()
                             self.slider6.set_value(GameConstants.GRID_PINS_CUSTOM)
+                            self.get_game().custom_pins.append((clicked_tile_x, clicked_tile_y))
                         else:
-                            # TODO Save list of pinned cells here
-                            pass
+                            if (clicked_tile_x, clicked_tile_y) in self.get_game().custom_pins:
+                                self.get_game().custom_pins.remove((clicked_tile_x, clicked_tile_y))
+                            else:
+                                self.get_game().custom_pins.append((clicked_tile_x, clicked_tile_y))
 
                     for i, draggable in enumerate(self.sliders):
                         if draggable.rect.collidepoint(event.pos):
@@ -243,6 +242,8 @@ class LevelEditScene(Scene):
                         self.sliders[i].x_position = max(min(mouse_x + self.offset_x, draggable.x_max), draggable.x_min)
                         self.sliders[i].update()
                         self.slider_values[i] = self.sliders[i].value
+                        if self.slider6.value != GameConstants.GRID_PINS_CUSTOM:
+                            self.get_game().custom_pins.clear()
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_ESCAPE:
